@@ -17,5 +17,6 @@ public class MainScreen extends Activity {
 
         lvNames = (ListView) findViewById(R.id.lvNames);
 
+        NavigationScreen.startActivity(this);
     }
 }
