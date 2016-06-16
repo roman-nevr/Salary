@@ -50,8 +50,11 @@ public class MainActivityAdapter extends BaseAdapter {
         }
         Employee employee = (Employee) getItem (position);
         TextView tvName = (TextView) view.findViewById(R.id.tvName);
+        TextView tvBalance = (TextView) view.findViewById(R.id.tvBalance);
 
         tvName.setText(employee.getName().toCharArray(), 0, employee.getName().length());
+        String balance = "" + employee.getBalance();
+        tvBalance.setText(balance.toCharArray(), 0, balance.length());
 
         return view;
     }

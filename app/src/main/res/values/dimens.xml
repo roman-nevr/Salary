@@ -3,4 +3,5 @@
     <dimen name="tvNameTextSize">35sp</dimen>
     <dimen name="tvBalanceTextSize">25sp</dimen>
     <dimen name="mainItemMarginSize">15dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 </resources>

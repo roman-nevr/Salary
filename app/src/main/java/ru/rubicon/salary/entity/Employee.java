@@ -24,7 +24,7 @@ public class Employee {
         this.name = name;
         this.active = true;
         this.comment = "";
-        this.startBalance = startBalance;
+        this.balance = startBalance;
     }
 
     public Employee(String name, boolean active, int startBalance){
@@ -66,4 +66,6 @@ public class Employee {
     public void setActive(boolean active) {
         this.active = active;
     }
+
+    public int getBalance() {return balance;}
 }

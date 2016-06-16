@@ -9,11 +9,12 @@
         tools:openDrawer="start"
     >
     <!-- The main content view -->
-    <FrameLayout
+    <!-- <FrameLayout
             android:id="@+id/content_frame"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent" /> -->
     <!-- The navigation drawer -->
+    <include layout="@layout/employees_list_activity" />
 
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"
