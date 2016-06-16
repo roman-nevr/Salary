@@ -1,6 +1,8 @@
 package ru.rubicon.salary.fragments;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.widget.Adapter;
 import android.widget.ArrayAdapter;
@@ -33,6 +35,9 @@ public class EmployeesListFragment extends ListFragment {
         setListAdapter(adapter);
 
         log("list_fragment");
+
+        /*FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.*/
     }
 
 

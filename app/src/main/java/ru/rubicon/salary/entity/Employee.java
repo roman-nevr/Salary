@@ -8,10 +8,20 @@ import java.util.ArrayList;
 public class Employee {
 
     private String name;
+    private float coefficient;
+    private int startBalance;
+    private int balance;
     private String comment;
     private boolean active;
-    private int balance;
-    private int startBalance;
+
+    public Employee(String name, float coefficient, int startBalance, int balance, String comment, boolean active) {
+        this.name = name;
+        this.coefficient = coefficient;
+        this.startBalance = startBalance;
+        this.balance = balance;
+        this.comment = comment;
+        this.active = active;
+    }
 
     public Employee(String name, boolean active, int startBalance, String comment) {
         this.name = name;
@@ -63,9 +73,11 @@ public class Employee {
         return active;
     }
 
-    public void setActive(boolean active) {
-        this.active = active;
-    }
+    public void setActive(boolean active) {this.active = active;}
 
     public int getBalance() {return balance;}
+
+    public float getCoefficient() {return coefficient;}
+
+    public void setCoefficient(float coefficient) {this.coefficient = coefficient;}
 }
