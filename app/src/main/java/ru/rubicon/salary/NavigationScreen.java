@@ -5,13 +5,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+
+
+import ru.rubicon.salary.fragments.EmployeesListFragment;
+import ru.rubicon.salary.fragments.SalaryListFragment;
 
 /**
  * Created by roma on 07.06.2016.
@@ -20,7 +22,7 @@ public class NavigationScreen extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
     private NavigationView mDrawerView;
-    private String[] mMenuPoints;
+    final static String TAG_1 = "FRAGMENT_1";
 
 
     @Override
@@ -29,8 +31,11 @@ public class NavigationScreen extends AppCompatActivity {
         setContentView(R.layout.navigation_drawer);
 
         mDrawerView = (NavigationView) findViewById(R.id.nav_view);
-
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerView.setNavigationItemSelectedListener(new SalaryOnNavigationItemSelectedListener());
+        Fragment fragment = new EmployeesListFragment();
+        showFragmentOnStart(fragment);
+
     }
 
 
@@ -42,10 +47,69 @@ public class NavigationScreen extends AppCompatActivity {
     private class SalaryOnNavigationItemSelectedListener implements NavigationView.OnNavigationItemSelectedListener {
         @Override
         public boolean onNavigationItemSelected(MenuItem item) {
-            int id = item.getItemId();
-            int id1 = R.id.nav_share;
-            int id_emp = R.id.nav_employee;
-            return false;
+            int itemId = item.getItemId();
+            switch (itemId){
+                case R.id.nav_employee:{
+                    showEmployeesFragment();
+                    break;
+                }
+                case R.id.nav_salary:{
+                    showSalaryFragment();
+                    break;
+                }
+            }
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+            return true;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+       // DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    /*private void selectItem(int position) {
+        // update the main content by replacing fragments
+        Fragment fragment = new PlanetFragment();
+        Bundle args = new Bundle();
+        args.putInt(PlanetFragment.ARG_PLANET_NUMBER, position);
+        fragment.setArguments(args);
+
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+
+        // update selected item and title, then close the drawer
+        mDrawerList.setItemChecked(position, true);
+        setTitle(mPlanetTitles[position]);
+        mDrawerLayout.closeDrawer(mDrawerList);
+    }*/
+
+    private void showSalaryFragment() {
+        //Fragment fragment = new SalaryListFragment();
+        showNewFragment(new SalaryListFragment());
+        /*getSupportFragmentManager().beginTransaction().replace(R.id.fragment, fragment).commit();*/
+    }
+
+    private void showEmployeesFragment() {
+
+        showNewFragment(new EmployeesListFragment());
+        /*Fragment fragmentOld = getSupportFragmentManager().findFragmentById(R.id.fragment);
+
+        Fragment fragmentNew = new EmployeesListFragment();
+        getSupportFragmentManager().beginTransaction().hide(fragmentOld).add(R.id.fragment, fragmentNew).commit();*/
+    }
+
+    private void showNewFragment(Fragment fragment){
+        Fragment fragmentOld = getSupportFragmentManager().findFragmentById(R.id.container);
+        getSupportFragmentManager().beginTransaction()./*hide(fragmentOld).add*/replace(R.id.container, fragment).commit();
+    }
+
+    private void showFragmentOnStart(Fragment fragment){
+        getSupportFragmentManager().beginTransaction().add(R.id.container, fragment, TAG_1).commit();
     }
 }

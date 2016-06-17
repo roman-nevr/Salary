@@ -11,29 +11,21 @@ import ru.rubicon.salary.entity.Employee;
 import static ru.rubicon.salary.utils.utils.log;
 
 /**
- * Created by roma on 16.06.2016.
+ * Created by roma on 17.06.2016.
  */
-public class EmployeesListFragment extends ListFragment {
-    private final String[] mCatNames = new String[]{"Рыжик", "Барсик",
-            "Мурзик", "Мурка", "Васька", "Томасина", "Бобик", "Кристина",
-            "Пушок", "Дымка", "Кузя", "Китти", "Барбос", "Масяня", "Симба"};
-
-
+public class SalaryListFragment extends ListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ArrayList<Employee> employees = new ArrayList<Employee>(Arrays.asList(new Employee("Roman", 16000), new Employee("Shurik", -16000)));
+        ArrayList<Employee> employees = new ArrayList<Employee>(Arrays.asList(new Employee("Salary", 16000), new Employee("Salary2", 16000)));
 
         ListAdapter adapter = new MainActivityAdapter(getContext(), employees);
         setListAdapter(adapter);
 
-        log("list_fragment");
+        log("Salary_list_fragment");
 
         /*FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.*/
     }
-
-
-
 }
