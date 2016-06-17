@@ -18,20 +18,29 @@ public class EmployeesListFragment extends ListFragment {
             "Мурзик", "Мурка", "Васька", "Томасина", "Бобик", "Кристина",
             "Пушок", "Дымка", "Кузя", "Китти", "Барбос", "Масяня", "Симба"};
 
+    ArrayList<Employee> employees;
+    ListAdapter adapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ArrayList<Employee> employees = new ArrayList<Employee>(Arrays.asList(new Employee("Roman", 16000), new Employee("Shurik", -16000)));
+         employees = new ArrayList<Employee>(Arrays.asList(new Employee("Roman", 16000), new Employee("Shurik", -16000)));
 
-        ListAdapter adapter = new MainActivityAdapter(getContext(), employees);
+        adapter = new MainActivityAdapter(getContext(), employees);
         setListAdapter(adapter);
+
+
 
         log("list_fragment");
 
         /*FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.*/
+    }
+
+    public void addEmployee(Employee employee){
+        employees.add(employee);
+        adapter = new MainActivityAdapter(getContext(), employees);
     }
 
 

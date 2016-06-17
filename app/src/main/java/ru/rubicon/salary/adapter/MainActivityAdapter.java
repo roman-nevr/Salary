@@ -58,4 +58,9 @@ public class MainActivityAdapter extends BaseAdapter {
 
         return view;
     }
+
+    @Override
+    public void notifyDataSetInvalidated() {
+        super.notifyDataSetInvalidated();
+    }
 }

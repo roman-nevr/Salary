@@ -13,14 +13,16 @@ public class Employee {
     private int balance;
     private String comment;
     private boolean active;
+    private int fixedSalary;
 
-    public Employee(String name, float coefficient, int startBalance, int balance, String comment, boolean active) {
+    public Employee(String name, float coefficient, int startBalance, int balance, String comment, boolean active, int fixedSalary) {
         this.name = name;
         this.coefficient = coefficient;
         this.startBalance = startBalance;
         this.balance = balance;
         this.comment = comment;
         this.active = active;
+        this.fixedSalary = fixedSalary;
     }
 
     public Employee(String name, boolean active, int startBalance, String comment) {
@@ -28,6 +30,7 @@ public class Employee {
         this.comment = comment;
         this.active = active;
         this.startBalance = startBalance;
+        fixedSalary = 0;
     }
 
     public Employee(String name, int startBalance) {
@@ -35,6 +38,7 @@ public class Employee {
         this.active = true;
         this.comment = "";
         this.balance = startBalance;
+        fixedSalary = 0;
     }
 
     public Employee(String name, boolean active, int startBalance){
@@ -42,6 +46,7 @@ public class Employee {
         this.active = active;
         this.comment = "";
         this.startBalance = startBalance;
+        fixedSalary = 0;
     }
 
     public String getComment() {

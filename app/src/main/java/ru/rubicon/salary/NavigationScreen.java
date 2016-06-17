@@ -57,6 +57,9 @@ public class NavigationScreen extends AppCompatActivity {
                     showSalaryFragment();
                     break;
                 }
+                case R.id.nav_send:{
+                    addEmployee
+                }
             }
             mDrawerLayout.closeDrawer(GravityCompat.START);
             return true;
