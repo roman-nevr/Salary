@@ -2,6 +2,7 @@ package ru.rubicon.salary.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.widget.BaseAdapter;
 import android.widget.ListAdapter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,7 +20,7 @@ public class EmployeesListFragment extends ListFragment {
             "Пушок", "Дымка", "Кузя", "Китти", "Барбос", "Масяня", "Симба"};
 
     ArrayList<Employee> employees;
-    ListAdapter adapter;
+    MainActivityAdapter adapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -29,9 +30,7 @@ public class EmployeesListFragment extends ListFragment {
 
         adapter = new MainActivityAdapter(getContext(), employees);
         setListAdapter(adapter);
-
-
-
+        setRetainInstance(true);
         log("list_fragment");
 
         /*FragmentTransaction transaction = getFragmentManager().beginTransaction();
@@ -40,8 +39,12 @@ public class EmployeesListFragment extends ListFragment {
 
     public void addEmployee(Employee employee){
         employees.add(employee);
-        adapter = new MainActivityAdapter(getContext(), employees);
+        /*adapter = new MainActivityAdapter(getContext(), employees);
+        setListAdapter(adapter);*/
+        adapter.notifyDataSetChanged();
     }
+
+
 
 
 

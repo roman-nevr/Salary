@@ -22,6 +22,7 @@ public class SalaryListFragment extends ListFragment {
 
         ListAdapter adapter = new MainActivityAdapter(getContext(), employees);
         setListAdapter(adapter);
+        setRetainInstance(true);
 
         log("Salary_list_fragment");
 

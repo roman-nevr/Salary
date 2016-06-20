@@ -1,17 +1,21 @@
 package ru.rubicon.salary;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 
+import java.util.List;
+
+import ru.rubicon.salary.entity.Employee;
 import ru.rubicon.salary.fragments.EmployeesListFragment;
 import ru.rubicon.salary.fragments.SalaryListFragment;
 
@@ -22,7 +26,11 @@ public class NavigationScreen extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
     private NavigationView mDrawerView;
-    final static String TAG_1 = "FRAGMENT_1";
+    private final static String TAG_1 = "employee_list";
+    private final static String TAG_2 = "salary_list";
+    private static final String FRAGMENT = "fragment";
+    private String currentTag;
+    private FragmentManager fragmentManager;
 
 
     @Override
@@ -33,9 +41,10 @@ public class NavigationScreen extends AppCompatActivity {
         mDrawerView = (NavigationView) findViewById(R.id.nav_view);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerView.setNavigationItemSelectedListener(new SalaryOnNavigationItemSelectedListener());
-        Fragment fragment = new EmployeesListFragment();
-        showFragmentOnStart(fragment);
 
+        fragmentManager = getSupportFragmentManager();
+
+        showFragmentOnStart(savedInstanceState);
     }
 
 
@@ -58,7 +67,7 @@ public class NavigationScreen extends AppCompatActivity {
                     break;
                 }
                 case R.id.nav_send:{
-                    addEmployee
+                    addEmployee(new Employee("Еще один", 10000));
                 }
             }
             mDrawerLayout.closeDrawer(GravityCompat.START);
@@ -66,9 +75,10 @@ public class NavigationScreen extends AppCompatActivity {
         }
     }
 
+
+
     @Override
     public void onBackPressed() {
-       // DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
             mDrawerLayout.closeDrawer(GravityCompat.START);
         } else {
@@ -76,43 +86,56 @@ public class NavigationScreen extends AppCompatActivity {
         }
     }
 
-    /*private void selectItem(int position) {
-        // update the main content by replacing fragments
-        Fragment fragment = new PlanetFragment();
-        Bundle args = new Bundle();
-        args.putInt(PlanetFragment.ARG_PLANET_NUMBER, position);
-        fragment.setArguments(args);
-
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
-
-        // update selected item and title, then close the drawer
-        mDrawerList.setItemChecked(position, true);
-        setTitle(mPlanetTitles[position]);
-        mDrawerLayout.closeDrawer(mDrawerList);
-    }*/
 
     private void showSalaryFragment() {
-        //Fragment fragment = new SalaryListFragment();
-        showNewFragment(new SalaryListFragment());
-        /*getSupportFragmentManager().beginTransaction().replace(R.id.fragment, fragment).commit();*/
+        showNewFragment(new SalaryListFragment(), TAG_2);
     }
 
     private void showEmployeesFragment() {
-
-        showNewFragment(new EmployeesListFragment());
-        /*Fragment fragmentOld = getSupportFragmentManager().findFragmentById(R.id.fragment);
-
-        Fragment fragmentNew = new EmployeesListFragment();
-        getSupportFragmentManager().beginTransaction().hide(fragmentOld).add(R.id.fragment, fragmentNew).commit();*/
+        showNewFragment(new EmployeesListFragment(), TAG_1);
     }
 
-    private void showNewFragment(Fragment fragment){
-        Fragment fragmentOld = getSupportFragmentManager().findFragmentById(R.id.container);
-        getSupportFragmentManager().beginTransaction()./*hide(fragmentOld).add*/replace(R.id.container, fragment).commit();
+    private void showNewFragment(Fragment fragment, String tag){
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment, tag).commit();
+        currentTag = tag;
     }
 
-    private void showFragmentOnStart(Fragment fragment){
-        getSupportFragmentManager().beginTransaction().add(R.id.container, fragment, TAG_1).commit();
+    private void showFragmentOnStart(Bundle data){
+        if (data == null){
+            getSupportFragmentManager().beginTransaction().add(R.id.container, getFragmentByTag(TAG_1), TAG_1).commit();
+        } else{
+            String tag = data.getString(FRAGMENT);
+        }
     }
+
+    private void addEmployee(Employee employee){
+        EmployeesListFragment fragment = (EmployeesListFragment) getSupportFragmentManager().findFragmentByTag(TAG_1);
+        if ((fragment != null) && (fragment.isVisible())){
+            fragment.addEmployee(employee);
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putString(FRAGMENT, currentTag);
+        //fragmentManager.putFragment(outState, TAG_1, fragmentManager.findFragmentByTag());
+        super.onSaveInstanceState(outState);
+    }
+
+    private Fragment getFragmentByTag(String tag){
+        List<Fragment> fragmentList = fragmentManager.getFragments();
+        for (Fragment fragment : fragmentList) {
+            if (fragment.getTag().equals(tag)){
+                return fragment;
+            }
+        }
+        if(tag.equals(TAG_1)){
+            return new EmployeesListFragment();
+        }
+        if(tag.equals(TAG_2)) {
+            return new SalaryListFragment();
+        }
+        return null;
+    }
+
 }

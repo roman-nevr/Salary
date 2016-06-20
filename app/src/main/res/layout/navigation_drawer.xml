@@ -14,7 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" /> -->
     <!-- The navigation drawer -->
-    <include layout="@layout/main_list_activity(land)" />
+    <include layout="@layout/main_list_activity" />
 
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"
