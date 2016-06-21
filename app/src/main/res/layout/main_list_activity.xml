@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     android:fitsSystemWindows="true"
+    android:id="@+id/clMainList"
     tools:context=".NavigationScreen">
 
     <android.support.design.widget.AppBarLayout
