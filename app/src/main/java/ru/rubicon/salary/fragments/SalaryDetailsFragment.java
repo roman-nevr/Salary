@@ -7,20 +7,26 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 
 import ru.rubicon.salary.R;
+import ru.rubicon.salary.adapter.EmployeesSalaryListAdapter;
+import ru.rubicon.salary.entity.Employee;
+import ru.rubicon.salary.entity.Salary;
 
 import static ru.rubicon.salary.utils.utils.log;
 
 /**
- * Created by roma on 21.06.2016.
+ * Created by roma on 22.06.2016.
  */
-public class EmployeeDetailsFragment extends Fragment {
-
+public class SalaryDetailsFragment extends Fragment {
     OnItemClickObserver mCallback;
-
     public interface OnItemClickObserver {
-        public void onEmployeeDetailsItemClick(int position);
+        public void onSalaryDetailsItemClick(int position);
     }
     @Override
     public void onAttach(Context context) {
@@ -34,10 +40,14 @@ public class EmployeeDetailsFragment extends Fragment {
         }
     }
 
+    ListView lvEmployeesSalaryList;
+    ArrayList<Salary> salaries;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
+        salaries = new ArrayList<>(Arrays.asList(new Salary(140000, new Date()), new Salary(160000, new Date())));
     }
 
     @Override
@@ -45,13 +55,12 @@ public class EmployeeDetailsFragment extends Fragment {
                              Bundle savedInstanceState) {
         //Intent launchingIntent = getActivity().getIntent();
         //String catName = launchingIntent.getStringExtra("catname");
-        View viewer = inflater.inflate(R.layout.employee_details, container, false);
+        View viewer = inflater.inflate(R.layout.salary_details, container, false);
+        lvEmployeesSalaryList = (ListView) viewer.findViewById(R.id.lvEmployeesSalaryList);
+        lvEmployeesSalaryList.setAdapter(new EmployeesSalaryListAdapter(getContext(), salaries));
         //mCatDescriptionTextView = (TextView) viewer.findViewById(R.id.textViewDescription);
 
         log("details");
         return viewer;
     }
-
-
-
 }

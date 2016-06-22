@@ -10,6 +10,11 @@
             android:id="@+id/nav_salary"
             android:icon="@android:drawable/ic_dialog_email"
             android:title="Salary"/>
+        <item
+            android:id="@+id/nav_temp_calc"
+            android:icon="@android:drawable/btn_dialog"
+            android:title="Temporal calculation"
+            />
 
     </group>
 

@@ -8,18 +8,18 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import java.util.List;
 import ru.rubicon.salary.entity.Employee;
+import ru.rubicon.salary.fragments.CalcTemporalFragment;
 import ru.rubicon.salary.fragments.EmployeeDetailsFragment;
 import ru.rubicon.salary.fragments.EmployeesListFragment;
+import ru.rubicon.salary.fragments.SalaryDetailsFragment;
 import ru.rubicon.salary.fragments.SalaryListFragment;
 import ru.rubicon.salary.utils.utils;
 
@@ -28,7 +28,8 @@ import ru.rubicon.salary.utils.utils;
  */
 public class NavigationScreen extends AppCompatActivity implements EmployeesListFragment.OnItemClickObserver,
                         SalaryListFragment.OnItemClickObserver,
-                        EmployeeDetailsFragment.OnItemClickObserver {
+                        EmployeeDetailsFragment.OnItemClickObserver,
+                        SalaryDetailsFragment.OnItemClickObserver{
 
     private DrawerLayout mDrawerLayout;
     private NavigationView mDrawerView;
@@ -36,8 +37,10 @@ public class NavigationScreen extends AppCompatActivity implements EmployeesList
     private CoordinatorLayout clMainList;
     private Toolbar toolbar;
     private final static String TAG_1 = "List of employees";
-    private final static String TAG_2 = "List of salary";
+    private final static String TAG_2 = "List of salaries";
     private final static String TAG_3 = "Employee details";
+    private final static String TAG_4 = "Salary details";
+    private final static String TAG_5 = "Temporal calculation";
     private static final String FRAGMENT = "fragment";
     private String currentTag;
     private FragmentManager fragmentManager;
@@ -77,6 +80,17 @@ public class NavigationScreen extends AppCompatActivity implements EmployeesList
     @Override
     public void onSalaryItemClick(int position) {
         utils.snackBarShort(clMainList, "Salary id "+position);
+        showSalaryDetailsFragment();
+    }
+
+    @Override
+    public void onSalaryDetailsItemClick(int position) {
+
+    }
+
+    @Override
+    public void onEmployeeDetailsItemClick(int position) {
+
     }
 
     private class SalaryOnNavigationItemSelectedListener implements NavigationView.OnNavigationItemSelectedListener {
@@ -94,6 +108,11 @@ public class NavigationScreen extends AppCompatActivity implements EmployeesList
                 }
                 case R.id.nav_send:{
                     addEmployee(new Employee("Еще один", 10000));
+                    break;
+                }
+                case R.id.nav_temp_calc:{
+                    showTempCalcFragment();
+                    break;
                 }
             }
             mDrawerLayout.closeDrawer(GravityCompat.START);
@@ -142,6 +161,14 @@ public class NavigationScreen extends AppCompatActivity implements EmployeesList
 
     private void showEmployeesDetailsFragment() {
         showNewFragmentWithBackStack(getFragmentByTag(TAG_3), TAG_3);
+    }
+
+    private void showSalaryDetailsFragment() {
+        showNewFragmentWithBackStack(getFragmentByTag(TAG_4), TAG_4);
+    }
+
+    private void showTempCalcFragment() {
+        showNewFragmentWithBackStack(getFragmentByTag(TAG_5), TAG_5);
     }
 
     private void showNewFragment(Fragment fragment, String tag){
@@ -204,6 +231,12 @@ public class NavigationScreen extends AppCompatActivity implements EmployeesList
         }
         if(tag.equals(TAG_3)) {
             return new EmployeeDetailsFragment();
+        }
+        if(tag.equals(TAG_4)) {
+            return new SalaryDetailsFragment();
+        }
+        if(tag.equals(TAG_5)) {
+            return new CalcTemporalFragment();
         }
         return null;
     }
