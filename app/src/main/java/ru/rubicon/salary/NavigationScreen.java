@@ -8,9 +8,12 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import java.util.List;
@@ -31,9 +34,10 @@ public class NavigationScreen extends AppCompatActivity implements EmployeesList
     private NavigationView mDrawerView;
     private FloatingActionButton actionButton;
     private CoordinatorLayout clMainList;
-    private final static String TAG_1 = "employees_list";
-    private final static String TAG_2 = "salary_list";
-    private final static String TAG_3 = "employee_details";
+    private Toolbar toolbar;
+    private final static String TAG_1 = "List of employees";
+    private final static String TAG_2 = "List of salary";
+    private final static String TAG_3 = "Employee details";
     private static final String FRAGMENT = "fragment";
     private String currentTag;
     private FragmentManager fragmentManager;
@@ -49,8 +53,10 @@ public class NavigationScreen extends AppCompatActivity implements EmployeesList
         mDrawerView.setNavigationItemSelectedListener(new SalaryOnNavigationItemSelectedListener());
         actionButton = (FloatingActionButton) findViewById(R.id.fab);
         clMainList = (CoordinatorLayout) findViewById(R.id.clMainList);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
 
         fragmentManager = getSupportFragmentManager();
+        fragmentManager.addOnBackStackChangedListener(new BackStackChangedListener());
 
         showFragmentOnStart(savedInstanceState);
 
@@ -66,7 +72,6 @@ public class NavigationScreen extends AppCompatActivity implements EmployeesList
     public void onEmployeeItemClick(int position) {
         //utils.snackBarShort(clMainList, "Employee id "+position);
         showEmployeesDetailsFragment();
-
     }
 
     @Override
@@ -103,6 +108,21 @@ public class NavigationScreen extends AppCompatActivity implements EmployeesList
         }
     }
 
+    private class BackStackChangedListener implements FragmentManager.OnBackStackChangedListener{
+        @Override
+        public void onBackStackChanged() {
+            toolbar.setTitle(fragmentManager.findFragmentById(R.id.container).getTag());
+            int backStackEntryCount = fragmentManager.getBackStackEntryCount();
+            if(backStackEntryCount > 0){
+                actionButton.hide();
+                //getActionBar().setDisplayHomeAsUpEnabled(true);
+            }else{
+                //getActionBar().setDisplayHomeAsUpEnabled(false);
+                actionButton.show();
+            }
+        }
+    }
+
     @Override
     public void onBackPressed() {
         if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
@@ -114,37 +134,41 @@ public class NavigationScreen extends AppCompatActivity implements EmployeesList
 
     private void showSalaryFragment() {
         showNewFragment(getFragmentByTag(TAG_2), TAG_2);
-        actionButton.show();
     }
 
     private void showEmployeesFragment() {
         showNewFragment(getFragmentByTag(TAG_1), TAG_1);
-        actionButton.show();
     }
 
     private void showEmployeesDetailsFragment() {
         showNewFragmentWithBackStack(getFragmentByTag(TAG_3), TAG_3);
-        actionButton.hide();
     }
 
     private void showNewFragment(Fragment fragment, String tag){
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment, tag).commit();
+        while (fragmentManager.popBackStackImmediate()){
+        }
+        fragmentManager.beginTransaction().replace(R.id.container, fragment, tag).commit();
         currentTag = tag;
+        toolbar.setTitle(tag);
+
     }
 
     private void showNewFragmentWithBackStack(Fragment fragment, String tag){
         getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment, tag).addToBackStack(FRAGMENT).commit();
+        getSupportFragmentManager().executePendingTransactions();
         currentTag = tag;
+        toolbar.setTitle(tag);
     }
 
     private void showFragmentOnStart(Bundle data){
-        actionButton.show();
         if (data == null){
             getSupportFragmentManager().beginTransaction().add(R.id.container, getFragmentByTag(TAG_1), TAG_1).commit();
             currentTag = TAG_1;
+            toolbar.setTitle(TAG_1);
         } else{
             String tag = data.getString(FRAGMENT);
-            showNewFragment(getFragmentByTag(tag),tag);
+            showNewFragment(getFragmentByTag(tag), tag);
+            toolbar.setTitle(tag);
         }
     }
 
@@ -167,7 +191,7 @@ public class NavigationScreen extends AppCompatActivity implements EmployeesList
         List<Fragment> fragmentList = fragmentManager.getFragments();
         if(fragmentList != null){
             for (Fragment fragment : fragmentList) {
-                if (fragment.getTag().equals(tag)){
+                if ((fragment != null) && (fragment.getTag().equals(tag))){
                     return fragment;
                 }
             }
