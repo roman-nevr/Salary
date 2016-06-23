@@ -18,11 +18,12 @@ import ru.rubicon.salary.R;
 import ru.rubicon.salary.adapter.EmployeeItemListAdapter;
 import ru.rubicon.salary.entity.Employee;
 import ru.rubicon.salary.entity.Salary;
+import ru.rubicon.salary.utils.utils;
 
 /**
  * Created by roma on 22.06.2016.
  */
-public class CalcTemporalFragment extends Fragment {
+public class CalcTemporalFragment extends Fragment implements EmployeeItemListAdapter.OnTextChangedObserver{
 
     private TextView tvRomanSum,  tvVitekSum,  tvShurikSum,  tvLehaSum,  tvIvanSum,  tvDenSum;
     private EditText etRomanCoef, etVitekCoef, etShurikCoef, etLehaCoef, etIvanCoef, etDenCoef;
@@ -50,6 +51,7 @@ public class CalcTemporalFragment extends Fragment {
     private Button btnCalc;
     private Salary salary;
     private ArrayList<Employee> employees;
+    private ArrayList<Integer> salaries;
     private ArrayList<Integer> amountOfDays;
 
     @Override
@@ -65,7 +67,9 @@ public class CalcTemporalFragment extends Fragment {
         etTotal = (EditText) viewer.findViewById(R.id.etTotal);
         lvEmployeesList = (ListView) viewer.findViewById(R.id.lvEmployeesList);
         employees = new ArrayList<Employee>(Arrays.asList(new Employee("Roman", 16000), new Employee("Shurik", -16000)));
-        lvEmployeesList.setAdapter(new EmployeeItemListAdapter(getContext(),employees));
+        salaries = new ArrayList<>(Arrays.asList(new Integer(20000), new Integer(10000)));
+
+        lvEmployeesList.setAdapter(new EmployeeItemListAdapter(getContext(), this ,employees, salaries));
         btnCalc = (Button) viewer.findViewById(R.id.btnCalc);
         btnCalc.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,5 +78,16 @@ public class CalcTemporalFragment extends Fragment {
         });
 
         return viewer;
+    }
+
+
+    @Override
+    public void onCoefTextChanged(int id, float value) {
+        utils.snackBarShort(this.getView(), "coef id " + id + " and value " + value);
+    }
+
+    @Override
+    public void onDaysTextChanged(int id, int value) {
+        utils.snackBarShort(this.getView(), "days id " + id + " and value " + value);
     }
 }

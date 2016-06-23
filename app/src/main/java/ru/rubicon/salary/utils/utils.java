@@ -23,4 +23,7 @@ public class utils {
     public static void snackBarShort(View view, String message){
         Snackbar.make(view, message, Snackbar.LENGTH_SHORT).show();
     }
+    public static void snackBarLong(View view, String message){
+        Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
+    }
 }
