@@ -14,6 +14,7 @@ import java.util.ArrayList;
 
 import ru.rubicon.salary.R;
 import ru.rubicon.salary.entity.Employee;
+import ru.rubicon.salary.entity.Salary;
 import ru.rubicon.salary.utils.utils;
 
 /**
@@ -22,33 +23,32 @@ import ru.rubicon.salary.utils.utils;
 public class EmployeeItemListAdapter extends BaseAdapter {
 
     Context context;
-    ArrayList<Employee> employees;
-    ArrayList<Integer> salaries;
     LayoutInflater lInflater;
+    Salary salary;
 
     OnTextChangedObserver mCallback;
 
     public interface OnTextChangedObserver {
         public void onCoefTextChanged(int id, float value);
-        public void onDaysTextChanged(int id, int value);
+        public void onDaysTextChanged(int id, float value);
     }
 
-    public EmployeeItemListAdapter(Context context, OnTextChangedObserver observer, ArrayList<Employee> employees, ArrayList<Integer> salaries) {
+    public EmployeeItemListAdapter(Context context, OnTextChangedObserver observer, Salary salary) {
         this.mCallback = observer;
         this.context = context;
-        this.employees = employees;
-        this.salaries = salaries;
+        this.salary = salary;
+
         lInflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
     public int getCount() {
-        return employees.size();
+        return salary.getEmployees().size();
     }
 
     @Override
     public Object getItem(int id) {
-        return employees.get(id);
+        return salary.getEmployees().get(id);
     }
 
     @Override
@@ -56,36 +56,45 @@ public class EmployeeItemListAdapter extends BaseAdapter {
         return id;
     }
 
-    TextView tvName, tvSum;
-    EditText etCoef, etDays;
+    /*TextView tvName, tvSum;
+    EditText etCoef, etDays;*/
 
     @Override
     public View getView(int id, View convertView, ViewGroup viewGroup) {
+        final ViewHolder holder;
         View view = convertView;
         if (view == null){
+            holder = new ViewHolder();
             view = lInflater.inflate(R.layout.employees_salary_list_item, viewGroup, false);
+            holder.tvName = (TextView) view.findViewById(R.id.tvName);
+            holder.tvSum = (TextView) view.findViewById(R.id.tvSum);
+            holder.etCoef = (EditText) view.findViewById(R.id.etCoef);
+            holder.etDays = (EditText) view.findViewById(R.id.etDays);
+            view.setTag(holder);
+        }else {
+            holder = (ViewHolder) view.getTag();
         }
-        tvName = (TextView) view.findViewById(R.id.tvName);
-        tvSum = (TextView) view.findViewById(R.id.tvSum);
-        etCoef = (EditText) view.findViewById(R.id.etCoef);
-        etDays = (EditText) view.findViewById(R.id.etDays);
+        holder.ref = id;
 
-        tvName.setText(employees.get(id).getName().toCharArray(), 0, employees.get(id).getName().length());
-        tvSum.setText(salaries.get(id).toString().toCharArray(), 0, salaries.get(id).toString().length());
-        etCoef.addTextChangedListener(new CoefTextChangedListener(id, etCoef));
-        etDays.addTextChangedListener(new DaysTextChangedListener(id, etDays));
+        holder.tvName.setText(salary.getEmployee(id).getName().toCharArray(), 0, salary.getEmployee(id).getName().length());
+        holder.tvSum.setText(salary.getEmployeeSalary().get(id).toString().toCharArray(), 0, salary.getEmployeeSalary().get(id).toString().length());
+        holder.etCoef.setText(""+salary.getEmployee(id).getCoefficient());
+        holder.etDays.setText(""+salary.getAmountOfDays(id));
+        /*holder.etCoef.addTextChangedListener(new CoefTextChangedListener(id));
+        holder.etDays.addTextChangedListener(new DaysTextChangedListener(id));*/
+        holder.etCoef.setOnFocusChangeListener(new CoefFocusChangedListener(id, holder));
+        holder.etDays.setOnFocusChangeListener(new DaysFocusChangedListener(id, holder));
+
 
         return view;
     }
 
     private class CoefTextChangedListener implements TextWatcher{
 
-        int id;
-        EditText view;
+        private int id;
 
-        public CoefTextChangedListener(int id, EditText view){
+        public CoefTextChangedListener(int id){
             this.id = id;
-            this.view = view;
         }
 
         @Override
@@ -102,7 +111,7 @@ public class EmployeeItemListAdapter extends BaseAdapter {
         public void afterTextChanged(Editable s) {
             float value;
             try {
-                value = Float.parseFloat(view.getText().toString());
+                value = Float.parseFloat(s.toString());
                 mCallback.onCoefTextChanged(id, value);
             }catch (NumberFormatException e){
                 utils.toastShort(context, "Input error");
@@ -112,12 +121,11 @@ public class EmployeeItemListAdapter extends BaseAdapter {
     }
 
     private class DaysTextChangedListener implements TextWatcher{
-        int id;
-        EditText view;
+        private int id;
 
-        public DaysTextChangedListener(int id, EditText view){
+
+        public DaysTextChangedListener(int id){
             this.id = id;
-            this.view = view;
         }
 
         @Override
@@ -133,11 +141,53 @@ public class EmployeeItemListAdapter extends BaseAdapter {
         @Override
         public void afterTextChanged(Editable s) {
             try {
-                int value = Integer.parseInt(view.getText().toString());
+                float value = Float.parseFloat(s.toString());
                 mCallback.onDaysTextChanged(id, value);
             }catch (NumberFormatException e){
                 utils.toastShort(context, "Input error");
             }
         }
+    }
+
+    private class CoefFocusChangedListener implements View.OnFocusChangeListener{
+        int id;
+        ViewHolder holder;
+
+        public CoefFocusChangedListener(int id, ViewHolder holder) {
+            this.id = id;
+            this.holder = holder;
+        }
+
+        @Override
+        public void onFocusChange(View view, boolean hasFocus) {
+            if (!hasFocus) {
+                float value = Float.parseFloat(holder.etCoef.getText().toString());
+                mCallback.onCoefTextChanged(id, value);
+            }
+        }
+    }
+
+    private class DaysFocusChangedListener implements View.OnFocusChangeListener{
+        int id;
+        ViewHolder holder;
+
+        public DaysFocusChangedListener(int id, ViewHolder holder) {
+            this.id = id;
+            this.holder = holder;
+        }
+
+        @Override
+        public void onFocusChange(View view, boolean hasFocus) {
+            if (!hasFocus) {
+                float value = Float.parseFloat(holder.etDays.getText().toString());
+                mCallback.onDaysTextChanged(id, value);
+            }
+        }
+    }
+
+    private class ViewHolder {
+        TextView tvName, tvSum;
+        EditText etCoef, etDays;
+        int ref;
     }
 }

@@ -49,6 +49,12 @@ public class Employee {
         fixedSalary = 0;
     }
 
+    public Employee(String name, float coefficient, int balance) {
+        this.name = name;
+        this.coefficient = coefficient;
+        this.balance = balance;
+    }
+
     public String getComment() {
         return comment;
     }

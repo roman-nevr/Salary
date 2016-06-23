@@ -19,7 +19,8 @@
         android:text="1.1"
         android:textSize="30dp"
         android:gravity="center"
-        />
+        android:focusable="true"
+        android:focusableInTouchMode="true" />
     <EditText
         android:layout_width="0dp"
         android:layout_weight="2"
@@ -30,7 +31,11 @@
         android:text="22"
         android:textSize="30dp"
         android:gravity="center"
-        />
+
+        android:focusable="true"
+        android:focusableInTouchMode="true">
+
+        </EditText>
     <TextView
         android:layout_width="0dp"
         android:layout_weight="3"
