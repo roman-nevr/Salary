@@ -95,11 +95,12 @@ public class Salary {
 
     public Salary (){
 
-        this.employees = new ArrayList<Employee>(Arrays.asList(new Employee("Roman",1.2f, 16000), new Employee("Shurik", 1.2f, -16000), new Employee("Leha", 1.1f, 13000), new Employee("Ivan", 1.2f, 13000)));
-        this.employeesSalary = new ArrayList<>(Arrays.asList(new Integer(20000), new Integer(10000),new Integer(20000), new Integer(12000)));
-        this.amountsOfDays = new ArrayList<Float>(Arrays.asList(new Float(22), new Float(5.5),new Float(20), new Float(22)));
+        this.employees = new ArrayList<>(Arrays.asList(new Employee("Roman",1.2f, 16000), new Employee("Vitek", 1.2f, -16000), new Employee("Leha", 1.1f, 13000),
+                                                             new Employee("Shurik", 1.2f, -16000), new Employee("Ivan", 1.2f, -16000), new Employee("Den", 1.2f, 13000)));
+        this.employeesSalary = new ArrayList<>(Arrays.asList(new Integer(20000), new Integer(10000),new Integer(20000), new Integer(12000),new Integer(12000),new Integer(12000)));
+        this.amountsOfDays = new ArrayList<>(Arrays.asList(new Float(22), new Float(22),new Float(22), new Float(22), new Float(22), new Float(22)));
         this.date = new Date();
-        this.total = 62000;
+        this.total = 140000;
         /*amountOfDays.add(new Float(20.0));
         amountOfDays.add(new Float(5.5));*/
 

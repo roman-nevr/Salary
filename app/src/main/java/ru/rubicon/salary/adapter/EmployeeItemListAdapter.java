@@ -3,9 +3,11 @@ package ru.rubicon.salary.adapter;
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -82,8 +84,9 @@ public class EmployeeItemListAdapter extends BaseAdapter {
         holder.etDays.setText(""+salary.getAmountOfDays(id));
         /*holder.etCoef.addTextChangedListener(new CoefTextChangedListener(id));
         holder.etDays.addTextChangedListener(new DaysTextChangedListener(id));*/
-        holder.etCoef.setOnFocusChangeListener(new CoefFocusChangedListener(id, holder));
-        holder.etDays.setOnFocusChangeListener(new DaysFocusChangedListener(id, holder));
+        /*holder.etCoef.setOnFocusChangeListener(new CoefFocusChangedListener(id, holder));
+        holder.etDays.setOnFocusChangeListener(new DaysFocusChangedListener(id, holder));*/
+        //holder.etDays.setOnKeyListener(new DaysKeyListener());
 
 
         return view;
@@ -181,7 +184,31 @@ public class EmployeeItemListAdapter extends BaseAdapter {
             if (!hasFocus) {
                 float value = Float.parseFloat(holder.etDays.getText().toString());
                 mCallback.onDaysTextChanged(id, value);
+            }else {
+                /*if(holder.etDays.requestFocus()){
+                    InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.showSoftInput(holder.etDays, InputMethodManager.SHOW_IMPLICIT);
+                }*/
+                /*holder.etDays.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        holder.etDays.requestFocus();
+                    }
+                });*/
             }
+        }
+    }
+
+    private class DaysKeyListener implements View.OnKeyListener{
+        @Override
+        public boolean onKey(View v, int keyCode, KeyEvent event) {
+            if (event.getAction() == event.ACTION_DOWN){
+                if (keyCode == event.KEYCODE_ENTER){
+                    hideKeyboard(v);
+                    return true;
+                }
+            }
+            return false;
         }
     }
 
@@ -189,5 +216,16 @@ public class EmployeeItemListAdapter extends BaseAdapter {
         TextView tvName, tvSum;
         EditText etCoef, etDays;
         int ref;
+    }
+
+    private void hideKeyboard(View view) {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    @Override
+    public void notifyDataSetChanged() {
+
+        super.notifyDataSetChanged();
     }
 }

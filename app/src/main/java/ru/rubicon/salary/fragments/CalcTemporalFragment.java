@@ -1,5 +1,6 @@
 package ru.rubicon.salary.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.IntegerRes;
 import android.support.annotation.Nullable;
@@ -7,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -77,7 +79,7 @@ public class CalcTemporalFragment extends Fragment implements EmployeeItemListAd
         etTotal = (EditText) viewer.findViewById(R.id.etTotal);
         lvEmployeesList = (ListView) viewer.findViewById(R.id.lvEmployeesList);
 
-
+        etTotal.setText(""+salary.getTotal());
         adapter = new EmployeeItemListAdapter(getContext(), this ,salary);
         lvEmployeesList.setAdapter(adapter);
         btnCalc = (Button) viewer.findViewById(R.id.btnCalc);
@@ -86,6 +88,7 @@ public class CalcTemporalFragment extends Fragment implements EmployeeItemListAd
             public void onClick(View view) {
                 try{
                     salary.setTotal(Integer.parseInt(etTotal.getText().toString()));
+                    hideKeyboard();
                     salary.calculateSalary();
                     adapter.notifyDataSetChanged();
                 }catch (NumberFormatException e){
@@ -97,6 +100,13 @@ public class CalcTemporalFragment extends Fragment implements EmployeeItemListAd
         return viewer;
     }
 
+    private void hideKeyboard() {
+        /*InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(mEditView.getWindowToken(), 0);*/
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(btnCalc.getWindowToken(), 0);
+    }
+
 
     @Override
     public void onCoefTextChanged(int id, float value) {
@@ -104,7 +114,7 @@ public class CalcTemporalFragment extends Fragment implements EmployeeItemListAd
         Employee employee = salary.getEmployee(id);
         salary.getEmployee(id).setCoefficient(value);
         id=1;
-        adapter.notifyDataSetChanged();
+        //adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -112,7 +122,8 @@ public class CalcTemporalFragment extends Fragment implements EmployeeItemListAd
         //utils.snackBarShort(this.getView(), "days id " + id + " and value " + value);
         salary.setAmountOfDays(id, value);
         id=1;
-        adapter.notifyDataSetChanged();
-
+        //adapter.notifyDataSetChanged();
     }
+
+
 }
