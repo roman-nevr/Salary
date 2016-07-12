@@ -34,10 +34,17 @@ public class EmployeeItemListAdapter extends BaseAdapter {
         public void onDaysTextChanged(int id, float value);
     }
 
+    public interface KeyboardCallback{
+        public void showKeyboard();
+        public void hideKeyboard();
+    }
+
     public EmployeeItemListAdapter(Context context, OnTextChangedObserver observer, Salary salary) {
         this.mCallback = observer;
         this.context = context;
         this.salary = salary;
+
+        focusedViewId = -1;
 
         lInflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
     }
@@ -88,9 +95,11 @@ public class EmployeeItemListAdapter extends BaseAdapter {
 
         if((id * 2) == focusedViewId){
             holder.etCoef.requestFocus();
+            moveCursorToTheEnd(holder.etCoef);
         }
         if((id * 2 + 1) == focusedViewId){
             holder.etDays.requestFocus();
+            moveCursorToTheEnd(holder.etDays);
         }
 
         return view;
@@ -170,6 +179,7 @@ public class EmployeeItemListAdapter extends BaseAdapter {
             if (!hasFocus) {
                 float value = Float.parseFloat(holder.etCoef.getText().toString());
                 mCallback.onCoefTextChanged(id, value);
+                focusedViewId = -1;
             }
             else {
                 focusedViewId = holder.ref * 2;
@@ -191,6 +201,7 @@ public class EmployeeItemListAdapter extends BaseAdapter {
             if (!hasFocus) {
                 float value = Float.parseFloat(holder.etDays.getText().toString());
                 mCallback.onDaysTextChanged(id, value);
+                focusedViewId = -1;
             } else {
                 focusedViewId = holder.ref * 2 + 1;
             }
@@ -203,8 +214,13 @@ public class EmployeeItemListAdapter extends BaseAdapter {
         int ref;
     }
 
-    public void updateListView(){
+    @Override
+    public void notifyDataSetChanged() {
         focusedViewId = -1;
-        notifyDataSetChanged();
+        super.notifyDataSetChanged();
+    }
+
+    private void moveCursorToTheEnd(EditText editText){
+        editText.setSelection(editText.getText().length());
     }
 }
