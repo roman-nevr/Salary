@@ -29,6 +29,7 @@ public class EmployeeItemListAdapter extends BaseAdapter {
     Salary salary;
 
     OnTextChangedObserver mCallback;
+    private int focusedViewId;
 
     public interface OnTextChangedObserver {
         public void onCoefTextChanged(int id, float value);
@@ -84,10 +85,16 @@ public class EmployeeItemListAdapter extends BaseAdapter {
         holder.etDays.setText(""+salary.getAmountOfDays(id));
         /*holder.etCoef.addTextChangedListener(new CoefTextChangedListener(id));
         holder.etDays.addTextChangedListener(new DaysTextChangedListener(id));*/
-        /*holder.etCoef.setOnFocusChangeListener(new CoefFocusChangedListener(id, holder));
-        holder.etDays.setOnFocusChangeListener(new DaysFocusChangedListener(id, holder));*/
+       holder.etCoef.setOnFocusChangeListener(new CoefFocusChangedListener(id, holder));
+        holder.etDays.setOnFocusChangeListener(new DaysFocusChangedListener(id, holder));
         //holder.etDays.setOnKeyListener(new DaysKeyListener());
 
+        if ((id * 2) == focusedViewId){
+            holder.etCoef.requestFocus();
+        }
+        if ((id * 2 + 1) == focusedViewId){
+            holder.etCoef.requestFocus();
+        }
 
         return view;
     }
@@ -166,6 +173,8 @@ public class EmployeeItemListAdapter extends BaseAdapter {
             if (!hasFocus) {
                 float value = Float.parseFloat(holder.etCoef.getText().toString());
                 mCallback.onCoefTextChanged(id, value);
+            } else {
+                focusedViewId = id * 2;
             }
         }
     }
@@ -185,16 +194,7 @@ public class EmployeeItemListAdapter extends BaseAdapter {
                 float value = Float.parseFloat(holder.etDays.getText().toString());
                 mCallback.onDaysTextChanged(id, value);
             }else {
-                /*if(holder.etDays.requestFocus()){
-                    InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.showSoftInput(holder.etDays, InputMethodManager.SHOW_IMPLICIT);
-                }*/
-                /*holder.etDays.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        holder.etDays.requestFocus();
-                    }
-                });*/
+                focusedViewId = id * 2 + 1;
             }
         }
     }
@@ -223,9 +223,4 @@ public class EmployeeItemListAdapter extends BaseAdapter {
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
-    @Override
-    public void notifyDataSetChanged() {
-
-        super.notifyDataSetChanged();
-    }
 }
