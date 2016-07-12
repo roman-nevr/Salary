@@ -22,11 +22,12 @@ import ru.rubicon.salary.utils.utils;
  */
 public class EmployeeItemListAdapter extends BaseAdapter {
 
-    Context context;
-    LayoutInflater lInflater;
-    Salary salary;
+    private Context context;
+    private LayoutInflater lInflater;
+    private Salary salary;
 
     OnTextChangedObserver mCallback;
+    private int focusedViewId;
 
     public interface OnTextChangedObserver {
         public void onCoefTextChanged(int id, float value);
@@ -85,6 +86,12 @@ public class EmployeeItemListAdapter extends BaseAdapter {
         holder.etCoef.setOnFocusChangeListener(new CoefFocusChangedListener(id, holder));
         holder.etDays.setOnFocusChangeListener(new DaysFocusChangedListener(id, holder));
 
+        if((id * 2) == focusedViewId){
+            holder.etCoef.requestFocus();
+        }
+        if((id * 2 + 1) == focusedViewId){
+            holder.etDays.requestFocus();
+        }
 
         return view;
     }
@@ -164,6 +171,9 @@ public class EmployeeItemListAdapter extends BaseAdapter {
                 float value = Float.parseFloat(holder.etCoef.getText().toString());
                 mCallback.onCoefTextChanged(id, value);
             }
+            else {
+                focusedViewId = holder.ref * 2;
+            }
         }
     }
 
@@ -181,6 +191,8 @@ public class EmployeeItemListAdapter extends BaseAdapter {
             if (!hasFocus) {
                 float value = Float.parseFloat(holder.etDays.getText().toString());
                 mCallback.onDaysTextChanged(id, value);
+            } else {
+                focusedViewId = holder.ref * 2 + 1;
             }
         }
     }
@@ -189,5 +201,10 @@ public class EmployeeItemListAdapter extends BaseAdapter {
         TextView tvName, tvSum;
         EditText etCoef, etDays;
         int ref;
+    }
+
+    public void updateListView(){
+        focusedViewId = -1;
+        notifyDataSetChanged();
     }
 }
