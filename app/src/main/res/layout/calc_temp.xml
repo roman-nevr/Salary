@@ -20,6 +20,7 @@
         android:layout_weight="0"
         android:inputType="numberDecimal"
         android:ems="10"
+        android:cursorVisible="false"
         android:id="@+id/etTotal" />
     <ListView
         android:layout_width="match_parent"

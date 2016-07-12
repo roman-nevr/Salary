@@ -14,6 +14,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
+
 import java.util.List;
 import ru.rubicon.salary.entity.Employee;
 import ru.rubicon.salary.fragments.CalcTemporalFragment;

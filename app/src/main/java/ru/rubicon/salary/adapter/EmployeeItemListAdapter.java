@@ -30,6 +30,7 @@ public class EmployeeItemListAdapter extends BaseAdapter {
 
     OnTextChangedObserver mCallback;
     private int focusedViewId;
+    private EditText focusedView;
 
     public interface OnTextChangedObserver {
         public void onCoefTextChanged(int id, float value);
@@ -40,6 +41,8 @@ public class EmployeeItemListAdapter extends BaseAdapter {
         this.mCallback = observer;
         this.context = context;
         this.salary = salary;
+        focusedViewId = -1;
+        focusedView = null;
 
         lInflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
     }
@@ -91,9 +94,13 @@ public class EmployeeItemListAdapter extends BaseAdapter {
 
         if ((id * 2) == focusedViewId){
             holder.etCoef.requestFocus();
+            focusedView = holder.etCoef;
+            moveCursorToTheEnd(holder.etCoef);
         }
         if ((id * 2 + 1) == focusedViewId){
-            holder.etCoef.requestFocus();
+            holder.etDays.requestFocus();
+            focusedView = holder.etDays;
+            moveCursorToTheEnd(holder.etDays);
         }
 
         return view;
@@ -221,6 +228,17 @@ public class EmployeeItemListAdapter extends BaseAdapter {
     private void hideKeyboard(View view) {
         InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    @Override
+    public void notifyDataSetChanged() {
+        focusedViewId = -1;
+        focusedView.clearFocus();
+        super.notifyDataSetChanged();
+    }
+
+    private void moveCursorToTheEnd(EditText editText){
+        editText.setSelection(editText.getText().length());
     }
 
 }
