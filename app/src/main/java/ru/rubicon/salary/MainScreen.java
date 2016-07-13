@@ -15,7 +15,7 @@ public class MainScreen extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        lvNames = (ListView) findViewById(R.id.lvNames);
+        //lvNames = (ListView) findViewById(R.id.lvNames);
 
         NavigationScreen.startActivity(this);
     }

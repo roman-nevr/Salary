@@ -87,9 +87,9 @@ public class CalcTemporalFragment extends Fragment implements EmployeeItemListAd
             public void onClick(View v) {
                 if (!isEtTotalFocused){
                     etTotal.setCursorVisible(true);
-                    etTotal.setSelection(etTotal.getText().length());
+                    etTotal.setFocusable(true);
+                    //etTotal.setSelection(etTotal.getText().length());
                 }
-
             }
         });
         etTotal.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -97,6 +97,10 @@ public class CalcTemporalFragment extends Fragment implements EmployeeItemListAd
             public void onFocusChange(View v, boolean hasFocus) {
                 if(!hasFocus){
                     etTotal.setCursorVisible(false);
+                    etTotal.clearFocus();
+                    etTotal.setFocusable(false);
+                }else {
+                    etTotal.setSelection(etTotal.getText().length());
                 }
             }
         });

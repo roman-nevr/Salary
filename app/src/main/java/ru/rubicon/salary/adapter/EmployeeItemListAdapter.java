@@ -12,10 +12,7 @@ import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-
 import ru.rubicon.salary.R;
-import ru.rubicon.salary.entity.Employee;
 import ru.rubicon.salary.entity.Salary;
 import ru.rubicon.salary.utils.utils;
 
@@ -30,6 +27,7 @@ public class EmployeeItemListAdapter extends BaseAdapter {
 
     OnTextChangedObserver mCallback;
     private int focusedViewId;
+    private int selectedPosition;
     private EditText focusedView;
 
     public interface OnTextChangedObserver {
@@ -42,6 +40,7 @@ public class EmployeeItemListAdapter extends BaseAdapter {
         this.context = context;
         this.salary = salary;
         focusedViewId = -1;
+        selectedPosition = -1;
         focusedView = null;
 
         lInflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
@@ -93,12 +92,16 @@ public class EmployeeItemListAdapter extends BaseAdapter {
         //holder.etDays.setOnKeyListener(new DaysKeyListener());
 
         if ((id * 2) == focusedViewId){
+            int s = selectedPosition;
             holder.etCoef.requestFocus();
+            selectedPosition = s;
             focusedView = holder.etCoef;
             moveCursorToTheEnd(holder.etCoef);
         }
         if ((id * 2 + 1) == focusedViewId){
+            int s = selectedPosition;
             holder.etDays.requestFocus();
+            selectedPosition = s;
             focusedView = holder.etDays;
             moveCursorToTheEnd(holder.etDays);
         }
@@ -182,6 +185,7 @@ public class EmployeeItemListAdapter extends BaseAdapter {
                 mCallback.onCoefTextChanged(id, value);
             } else {
                 focusedViewId = id * 2;
+                selectedPosition = holder.etCoef.getSelectionStart();
             }
         }
     }
@@ -201,7 +205,11 @@ public class EmployeeItemListAdapter extends BaseAdapter {
                 float value = Float.parseFloat(holder.etDays.getText().toString());
                 mCallback.onDaysTextChanged(id, value);
             }else {
+                int s;
+                s = holder.etDays.getSelectionStart();
+                s = holder.etDays.getSelectionEnd();
                 focusedViewId = id * 2 + 1;
+                selectedPosition = holder.etDays.getSelectionStart();
             }
         }
     }
@@ -233,12 +241,19 @@ public class EmployeeItemListAdapter extends BaseAdapter {
     @Override
     public void notifyDataSetChanged() {
         focusedViewId = -1;
-        focusedView.clearFocus();
+        selectedPosition = -1;
+        if (focusedView != null){
+            focusedView.clearFocus();
+        }
         super.notifyDataSetChanged();
     }
 
     private void moveCursorToTheEnd(EditText editText){
-        editText.setSelection(editText.getText().length());
+        if (selectedPosition >= 0){
+            editText.setSelection(selectedPosition);
+        }else {
+            editText.setSelection(editText.getText().length());
+        }
     }
 
 }
