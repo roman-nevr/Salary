@@ -54,6 +54,7 @@ public class CalcTemporalFragment extends Fragment implements EmployeeItemListAd
         etIvanDays = (EditText) viewer.findViewById(R.id.etIvanDays);
         etDenDays = (EditText) viewer.findViewById(R.id.etDenDays);*/
     private EditText etTotal;
+    private boolean isEtTotalFocused;
     private ListView lvEmployeesList;
     private Button btnCalc;
     private Salary salary;
@@ -69,6 +70,7 @@ public class CalcTemporalFragment extends Fragment implements EmployeeItemListAd
         setRetainInstance(true);
 
         salary = new Salary();
+        isEtTotalFocused = false;
 
 
     }
@@ -80,21 +82,21 @@ public class CalcTemporalFragment extends Fragment implements EmployeeItemListAd
         lvEmployeesList = (ListView) viewer.findViewById(R.id.lvEmployeesList);
 
         etTotal.setText(""+salary.getTotal());
-        /*etTotal.setOnClickListener(new View.OnClickListener() {
+        etTotal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                etTotal.setCursorVisible(true);
+                if (!isEtTotalFocused){
+                    etTotal.setCursorVisible(true);
+                    etTotal.setSelection(etTotal.getText().length());
+                }
 
             }
-        });*/
+        });
         etTotal.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if(!hasFocus){
                     etTotal.setCursorVisible(false);
-                }else {
-                    etTotal.setSelection(etTotal.getText().length());
-                    etTotal.setCursorVisible(true);
                 }
             }
         });
@@ -134,8 +136,6 @@ public class CalcTemporalFragment extends Fragment implements EmployeeItemListAd
     }
 
     private void hideKeyboard() {
-        /*InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(mEditView.getWindowToken(), 0);*/
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(viewer.getWindowToken(), 0);
     }
@@ -143,19 +143,14 @@ public class CalcTemporalFragment extends Fragment implements EmployeeItemListAd
 
     @Override
     public void onCoefTextChanged(int id, float value) {
-        //utils.snackBarShort(this.getView(), "coef id " + id + " and value " + value);
         Employee employee = salary.getEmployee(id);
         salary.getEmployee(id).setCoefficient(value);
-        id=1;
-        //adapter.notifyDataSetChanged();
+
     }
 
     @Override
     public void onDaysTextChanged(int id, float value) {
-        //utils.snackBarShort(this.getView(), "days id " + id + " and value " + value);
         salary.setAmountOfDays(id, value);
-        id=1;
-        //adapter.notifyDataSetChanged();
     }
 
     private void nop(){
