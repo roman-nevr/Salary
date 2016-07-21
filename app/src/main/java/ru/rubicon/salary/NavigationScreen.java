@@ -20,6 +20,7 @@ import android.view.WindowManager;
 import java.util.List;
 import ru.rubicon.salary.entity.Employee;
 import ru.rubicon.salary.fragments.CalcTemporalFragment;
+import ru.rubicon.salary.fragments.CalcTemporalFragmentAlt;
 import ru.rubicon.salary.fragments.EmployeeDetailsFragment;
 import ru.rubicon.salary.fragments.EmployeesListFragment;
 import ru.rubicon.salary.fragments.SalaryDetailsFragment;
@@ -44,6 +45,7 @@ public class NavigationScreen extends AppCompatActivity implements EmployeesList
     private final static String TAG_3 = "Employee details";
     private final static String TAG_4 = "Salary details";
     private final static String TAG_5 = "Temporal calculation";
+    private final static String TAG_6 = "Temporal calculation alt";
     private static final String FRAGMENT = "fragment";
     private String currentTag;
     private FragmentManager fragmentManager;
@@ -124,11 +126,17 @@ public class NavigationScreen extends AppCompatActivity implements EmployeesList
                     showTempCalcFragment();
                     break;
                 }
+                case R.id.nav_temp_calc_alt:{
+                    showTempCalcFragmentAlt();
+                    break;
+                }
             }
             mDrawerLayout.closeDrawer(GravityCompat.START);
             return true;
         }
     }
+
+
 
     private class ActionButtonOnClickListener implements View.OnClickListener{
         @Override
@@ -179,6 +187,10 @@ public class NavigationScreen extends AppCompatActivity implements EmployeesList
 
     private void showTempCalcFragment() {
         showNewFragmentWithBackStack(getFragmentByTag(TAG_5), TAG_5);
+    }
+
+    private void showTempCalcFragmentAlt() {
+        showNewFragmentWithBackStack(getFragmentByTag(TAG_6), TAG_6);
     }
 
     private void showNewFragment(Fragment fragment, String tag){
@@ -247,6 +259,9 @@ public class NavigationScreen extends AppCompatActivity implements EmployeesList
         }
         if(tag.equals(TAG_5)) {
             return new CalcTemporalFragment();
+        }
+        if(tag.equals(TAG_6)){
+            return new CalcTemporalFragmentAlt();
         }
         return null;
     }

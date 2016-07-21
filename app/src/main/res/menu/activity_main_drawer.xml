@@ -15,6 +15,11 @@
             android:icon="@android:drawable/btn_dialog"
             android:title="Temporal calculation"
             />
+        <item
+            android:id="@+id/nav_temp_calc_alt"
+            android:icon="@android:drawable/btn_dialog"
+            android:title="Temporal calculation alt"
+            />
 
     </group>
 

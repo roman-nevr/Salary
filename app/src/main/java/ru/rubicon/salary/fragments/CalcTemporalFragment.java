@@ -144,6 +144,11 @@ public class CalcTemporalFragment extends Fragment implements EmployeeItemListAd
         imm.hideSoftInputFromWindow(viewer.getWindowToken(), 0);
     }
 
+    private void removeFocus(){
+        View current = getActivity().getCurrentFocus();
+        if (current != null) current.clearFocus();
+    }
+
 
     @Override
     public void onCoefTextChanged(int id, float value) {
@@ -160,10 +165,7 @@ public class CalcTemporalFragment extends Fragment implements EmployeeItemListAd
     private void nop(){
     }
 
-    private void removeFocus(){
-        View current = getActivity().getCurrentFocus();
-        if (current != null) current.clearFocus();
-    }
+
 
 
 }

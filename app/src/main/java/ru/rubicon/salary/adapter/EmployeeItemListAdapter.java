@@ -62,7 +62,7 @@ public class EmployeeItemListAdapter extends BaseAdapter {
     }
 
     /*TextView tvName, tvSum;
-    EditText etCoef, etDays;*/
+    EditText tvCoef, tvDays;*/
 
     @Override
     public View getView(int id, View convertView, ViewGroup viewGroup) {
@@ -85,11 +85,11 @@ public class EmployeeItemListAdapter extends BaseAdapter {
         holder.tvSum.setText(salary.getEmployeeSalary().get(id).toString().toCharArray(), 0, salary.getEmployeeSalary().get(id).toString().length());
         holder.etCoef.setText(""+salary.getEmployee(id).getCoefficient());
         holder.etDays.setText(""+salary.getAmountOfDays(id));
-        /*holder.etCoef.addTextChangedListener(new CoefTextChangedListener(id));
-        holder.etDays.addTextChangedListener(new DaysTextChangedListener(id));*/
+        /*holder.tvCoef.addTextChangedListener(new CoefTextChangedListener(id));
+        holder.tvDays.addTextChangedListener(new DaysTextChangedListener(id));*/
        holder.etCoef.setOnFocusChangeListener(new CoefFocusChangedListener(id, holder));
         holder.etDays.setOnFocusChangeListener(new DaysFocusChangedListener(id, holder));
-        //holder.etDays.setOnKeyListener(new DaysKeyListener());
+        //holder.tvDays.setOnKeyListener(new DaysKeyListener());
 
         if ((id * 2) == focusedViewId){
             int s = selectedPosition;
