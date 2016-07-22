@@ -13,9 +13,12 @@ public class DatabaseHelper extends SQLiteOpenHelper implements BaseColumns{
 
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "salary.db";
-    public static final String DATABASE_TABLE_NAMES = "names";
+    public static final String DATABASE_TABLE_EMPLOYEES = "employees";
     public static final String DATABASE_TABLE_FINANCE = "finance";
     public static final String EMPLOYEE_NAME = "name";
+    public static final String EMPLOYEE_COEF = "coef";
+    public static final String EMPLOYEE_START_BALANCE = "start_balance";
+    public static final String EMPLOYEE_BALANCE = "balance";
     public static final String EMPLOYEE_ACTIVITY = "activity";
     public static final String EMPLOYEE_COMMENT = "comment";
     public static final String CASH_DATE = "date";
@@ -28,17 +31,23 @@ public class DatabaseHelper extends SQLiteOpenHelper implements BaseColumns{
         super(context, name, factory, version);
     }
 
+    //public DatabaseHelper
+
     public DatabaseHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version, DatabaseErrorHandler errorHandler) {
         super(context, name, factory, version, errorHandler);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String script = "create table " + DATABASE_TABLE_NAMES + " (" +
+        String script = "create table " + DATABASE_TABLE_EMPLOYEES + " (" +
                 BaseColumns._ID + " integer primary key autoincrement, " +
                 EMPLOYEE_NAME + " text not null, " +
-                EMPLOYEE_ACTIVITY + "integer, " +
-                EMPLOYEE_COMMENT + "text,";
+                EMPLOYEE_COEF + " real, " +
+                EMPLOYEE_START_BALANCE + " integer, " +
+                EMPLOYEE_BALANCE + " integer, " +
+                EMPLOYEE_ACTIVITY + " integer, " +
+                EMPLOYEE_COMMENT + " text, ";
+        db.execSQL(script);
 
     }
 

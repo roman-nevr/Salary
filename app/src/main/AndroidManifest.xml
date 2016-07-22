@@ -26,6 +26,7 @@
         <activity
             android:name=".EmployeeDialogActivity"
             android:label="Employee"
+            android:theme="@style/Theme.AppCompat.Light.Dialog"
             >
         </activity>
     </application>

@@ -1,5 +1,6 @@
 package ru.rubicon.salary.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,13 +18,14 @@ import android.widget.ListView;
 import ru.rubicon.salary.EmployeeDialogActivity;
 import ru.rubicon.salary.R;
 import ru.rubicon.salary.adapter.EmployeeItemListAdapterAlt;
+import ru.rubicon.salary.entity.Employee;
 import ru.rubicon.salary.entity.Salary;
 import ru.rubicon.salary.utils.utils;
 
 /**
  * Created by admin on 21.07.2016.
  */
-public class CalcTemporalFragmentAlt extends Fragment implements EmployeeItemListAdapterAlt.OnListItemClickListener{
+public class CalcTemporalFragmentAlt extends Fragment implements EmployeeItemListAdapterAlt.OnListItemClickListener {
 
     private Salary salary;
     private View viewer;
@@ -95,8 +97,16 @@ public class CalcTemporalFragmentAlt extends Fragment implements EmployeeItemLis
 
     @Override
     public void OnListItemClick(int position) {
-        Intent intent = new Intent(getActivity(), EmployeeDialogActivity.class);
-        startActivityForResult(intent, position);
+       /* Intent intent = new Intent(getActivity(), EmployeeDialogActivity.class);
+        startActivityForResult(intent, position);*/
+        EmployeeDialogFragment employeeDialogFragment = new EmployeeDialogFragment();
+        Bundle bundle = new Bundle();
+        bundle.putFloat(EmployeeDialogFragment.DIALOG_COEF, salary.getEmployee(position).getCoefficient());
+        bundle.putFloat(EmployeeDialogFragment.DIALOG_DAYS, salary.getAmountOfDays(position));
+        bundle.putString(EmployeeDialogFragment.DIALOG_NAME, salary.getEmployee(position).getName());
+        employeeDialogFragment.setArguments(bundle);
+        employeeDialogFragment.setTargetFragment(this, position);
+        employeeDialogFragment.show(getFragmentManager(), "ask");
     }
 
     private class CalcButtonClickListener implements View.OnClickListener{
@@ -118,5 +128,11 @@ public class CalcTemporalFragmentAlt extends Fragment implements EmployeeItemLis
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        int id = requestCode;
+        if (resultCode == Activity.RESULT_OK){
+            salary.getEmployee(id).setCoefficient(data.getFloatExtra(EmployeeDialogFragment.DIALOG_COEF, 1.0f));
+            salary.setAmountOfDays(id, data.getFloatExtra(EmployeeDialogFragment.DIALOG_DAYS, 22.0f));
+        }
+        adapter.notifyDataSetChanged();
     }
 }

@@ -8,4 +8,7 @@
     </string-array>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
+    <string name="ok_button">Save</string>
+    <string name="cancel_button">Cancel</string>
+    <string name="error_message">Check input</string>
 </resources>

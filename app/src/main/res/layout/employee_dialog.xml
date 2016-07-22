@@ -3,80 +3,97 @@
     xmlns:tools="http://schemas.android.com/tools"
      android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".EmployeeDialogActivity">
-
+    tools:context=".EmployeeDialogActivity"
+    android:orientation="vertical"
+    android:padding="10dp">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Name"
-        android:id="@+id/tvName"
+        android:text="Employee"
+        android:id="@+id/tvTitle"
         android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_centerHorizontal="true" />
 
-    <EditText
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:text="Name"
-        android:ems="10"
-        android:id="@+id/etName"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/tvName"
-        android:layout_toEndOf="@+id/tvName" />
+        android:orientation="horizontal"
+        android:id="@+id/llName"
+        android:layout_below="@+id/tvTitle"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Name"
+            android:id="@+id/tvName"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Coefficient"
-        android:id="@+id/tvCoef"
-        android:layout_below="@+id/etName"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:text="Name"
+            android:ems="10"
+            android:id="@+id/etName" />
+    </LinearLayout>
 
-    <EditText
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="number"
-        android:ems="10"
-        android:id="@+id/etCoef"
-        android:layout_alignTop="@+id/tvCoef"
-        android:layout_toRightOf="@+id/tvCoef"
-        android:layout_toEndOf="@+id/tvCoef"
-        android:text="1.5" />
+        android:orientation="horizontal"
+        android:id="@+id/llCoef"
+        android:layout_below="@+id/llName">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Coefficient"
+            android:id="@+id/tvCoef" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Amount of Days"
-        android:id="@+id/tvDays"
-        android:layout_below="@+id/etCoef"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+            android:ems="10"
+            android:id="@+id/etCoef"
+            android:text="1.5" />
+    </LinearLayout>
 
-    <EditText
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="number"
-        android:ems="10"
-        android:id="@+id/etDays"
-        android:layout_alignTop="@+id/tvDays"
-        android:layout_toRightOf="@+id/tvDays"
-        android:layout_toEndOf="@+id/tvDays"
-        android:text="22.0" />
+        android:orientation="horizontal"
+        android:id="@+id/llDays"
+        android:layout_below="@+id/llCoef">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Amount of Days"
+            android:id="@+id/tvDays" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+            android:ems="10"
+            android:id="@+id/etDays"
+            android:text="22.0" />
+    </LinearLayout>
+
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Button"
-        android:id="@+id/button2"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
+        android:text="Save"
+        android:id="@+id/btnSave"
+        android:layout_below="@+id/llDays"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_alignLeft="@+id/tvTitle"
+        android:layout_alignStart="@+id/tvTitle" />
+
+
 </RelativeLayout>
