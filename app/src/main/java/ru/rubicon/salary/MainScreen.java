@@ -13,7 +13,7 @@ public class MainScreen extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.employee_dialog);
+        setContentView(R.layout.employee_calc_dialog);
 
         //lvNames = (ListView) findViewById(R.id.lvNames);
 

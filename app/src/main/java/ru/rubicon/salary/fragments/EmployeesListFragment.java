@@ -1,6 +1,7 @@
 package ru.rubicon.salary.fragments;
 
-import android.content.Context;
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.View;
@@ -16,25 +17,6 @@ import static ru.rubicon.salary.utils.utils.log;
  */
 public class EmployeesListFragment extends ListFragment {
 
-    OnItemClickObserver mCallback;
-
-    // Container Activity must implement this interface
-    public interface OnItemClickObserver {
-        public void onEmployeeItemClick(int position);
-    }
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-        // This makes sure that the container activity has implemented
-        // the callback interface. If not, it throws an exception
-        try {
-            mCallback = (OnItemClickObserver) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString()
-                    + " must implement OnItemClickObserver");
-        }
-    }
 
     ArrayList<Employee> employees;
     MainActivityAdapter adapter;
@@ -53,8 +35,21 @@ public class EmployeesListFragment extends ListFragment {
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
 
+        EmployeeDetailsDialogFragment detailsFragment = new EmployeeDetailsDialogFragment();
+        Bundle bundle = new Bundle();
+
+        detailsFragment.setArguments(bundle);
+        detailsFragment.setTargetFragment(this, position);
+        detailsFragment.show(getFragmentManager(), "ask_details");
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == Activity.RESULT_OK){
+
+        }
     }
 
     public void addEmployee(Employee employee){

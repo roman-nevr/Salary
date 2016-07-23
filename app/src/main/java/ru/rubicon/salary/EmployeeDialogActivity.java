@@ -1,7 +1,6 @@
 package ru.rubicon.salary;
 
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -16,7 +15,7 @@ public class EmployeeDialogActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.employee_dialog);
+        setContentView(R.layout.employee_calc_dialog);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
     }
 }

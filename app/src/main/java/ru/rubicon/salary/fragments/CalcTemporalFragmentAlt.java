@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,7 +17,6 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 import ru.rubicon.salary.DAO.EmployeeDataSource;
-import ru.rubicon.salary.EmployeeDialogActivity;
 import ru.rubicon.salary.R;
 import ru.rubicon.salary.adapter.EmployeeItemListAdapterAlt;
 import ru.rubicon.salary.entity.Employee;
@@ -45,11 +43,17 @@ public class CalcTemporalFragmentAlt extends Fragment implements EmployeeItemLis
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         isEtTotalFocused = false;
-        salary = new Salary();
         dataSource = new EmployeeDataSource(getContext());
         dataSource.open();
+        salary = performSalary();
+    }
+
+    private Salary performSalary() {
+        salary = new Salary();
         ArrayList<Employee> employees = dataSource.readAllEmployees();
         salary.setEmployees(employees);
+        salary.calculateSalary();
+        return salary;
     }
 
     @Override
@@ -86,6 +90,7 @@ public class CalcTemporalFragmentAlt extends Fragment implements EmployeeItemLis
 
         btnCalc = (Button) viewer.findViewById(R.id.btnCalc);
         btnCalc.setOnClickListener(new CalcButtonClickListener());
+        hideKeyboard();
 
         return viewer;
     }
@@ -108,11 +113,12 @@ public class CalcTemporalFragmentAlt extends Fragment implements EmployeeItemLis
     public void OnListItemClick(int position) {
        /* Intent intent = new Intent(getActivity(), EmployeeDialogActivity.class);
         startActivityForResult(intent, position);*/
-        EmployeeDialogFragment employeeDialogFragment = new EmployeeDialogFragment();
+        hideKeyboard();
+        EmployeeCalcDialogFragment employeeDialogFragment = new EmployeeCalcDialogFragment();
         Bundle bundle = new Bundle();
-        bundle.putFloat(EmployeeDialogFragment.DIALOG_COEF, salary.getEmployee(position).getCoefficient());
-        bundle.putFloat(EmployeeDialogFragment.DIALOG_DAYS, salary.getAmountOfDays(position));
-        bundle.putString(EmployeeDialogFragment.DIALOG_NAME, salary.getEmployee(position).getName());
+        bundle.putFloat(EmployeeCalcDialogFragment.DIALOG_COEF, salary.getEmployee(position).getCoefficient());
+        bundle.putFloat(EmployeeCalcDialogFragment.DIALOG_DAYS, salary.getAmountOfDays(position));
+        bundle.putString(EmployeeCalcDialogFragment.DIALOG_NAME, salary.getEmployee(position).getName());
         employeeDialogFragment.setArguments(bundle);
         employeeDialogFragment.setTargetFragment(this, position);
         employeeDialogFragment.show(getFragmentManager(), "ask");
@@ -139,12 +145,10 @@ public class CalcTemporalFragmentAlt extends Fragment implements EmployeeItemLis
         super.onActivityResult(requestCode, resultCode, data);
         int id = requestCode;
         if (resultCode == Activity.RESULT_OK){
-            float coef = data.getFloatExtra(EmployeeDialogFragment.DIALOG_COEF, 0.0f);
+            float coef = data.getFloatExtra(EmployeeCalcDialogFragment.DIALOG_COEF, 0.0f);
             salary.getEmployee(id).setCoefficient(coef);
-            salary.setAmountOfDays(id, data.getFloatExtra(EmployeeDialogFragment.DIALOG_DAYS, 0.0f));
+            salary.setAmountOfDays(id, data.getFloatExtra(EmployeeCalcDialogFragment.DIALOG_DAYS, 0.0f));
             dataSource.updateEmployee(id, coef);
-            ArrayList<Employee> employees = dataSource.readAllEmployees();
-            employees.add(new Employee(7,"", 0f));
         }
 
         adapter.notifyDataSetChanged();
@@ -156,9 +160,12 @@ public class CalcTemporalFragmentAlt extends Fragment implements EmployeeItemLis
         super.onResume();
     }
 
+
+
     @Override
     public void onPause() {
         dataSource.close();
         super.onPause();
+        hideKeyboard();
     }
 }

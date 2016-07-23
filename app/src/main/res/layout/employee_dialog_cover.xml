@@ -20,5 +20,5 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/employee_dialog" />
+    <include layout="@layout/employee_calc_dialog" />
 </LinearLayout>

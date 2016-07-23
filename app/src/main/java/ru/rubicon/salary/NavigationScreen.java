@@ -21,7 +21,7 @@ import java.util.List;
 import ru.rubicon.salary.entity.Employee;
 import ru.rubicon.salary.fragments.CalcTemporalFragment;
 import ru.rubicon.salary.fragments.CalcTemporalFragmentAlt;
-import ru.rubicon.salary.fragments.EmployeeDetailsFragment;
+import ru.rubicon.salary.fragments.EmployeeDetailsDialogFragment;
 import ru.rubicon.salary.fragments.EmployeesListFragment;
 import ru.rubicon.salary.fragments.SalaryDetailsFragment;
 import ru.rubicon.salary.fragments.SalaryListFragment;
@@ -30,9 +30,9 @@ import ru.rubicon.salary.utils.utils;
 /**
  * Created by roma on 07.06.2016.
  */
-public class NavigationScreen extends AppCompatActivity implements EmployeesListFragment.OnItemClickObserver,
+public class NavigationScreen extends AppCompatActivity implements
                         SalaryListFragment.OnItemClickObserver,
-                        EmployeeDetailsFragment.OnItemClickObserver,
+
                         SalaryDetailsFragment.OnItemClickObserver{
 
     private DrawerLayout mDrawerLayout;
@@ -83,11 +83,6 @@ public class NavigationScreen extends AppCompatActivity implements EmployeesList
         context.startActivity(intent);
     }
 
-    @Override
-    public void onEmployeeItemClick(int position) {
-        //utils.snackBarShort(clMainList, "Employee id "+position);
-        showEmployeesDetailsFragment();
-    }
 
     @Override
     public void onSalaryItemClick(int position) {
@@ -100,10 +95,6 @@ public class NavigationScreen extends AppCompatActivity implements EmployeesList
 
     }
 
-    @Override
-    public void onEmployeeDetailsItemClick(int position) {
-
-    }
 
     private class SalaryOnNavigationItemSelectedListener implements NavigationView.OnNavigationItemSelectedListener {
         @Override
@@ -252,7 +243,7 @@ public class NavigationScreen extends AppCompatActivity implements EmployeesList
             return new SalaryListFragment();
         }
         if(tag.equals(TAG_3)) {
-            return new EmployeeDetailsFragment();
+            return new EmployeeDetailsDialogFragment();
         }
         if(tag.equals(TAG_4)) {
             return new SalaryDetailsFragment();
