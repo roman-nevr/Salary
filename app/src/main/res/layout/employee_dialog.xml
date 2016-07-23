@@ -7,28 +7,14 @@
     android:orientation="vertical"
     android:padding="10dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Employee"
-        android:id="@+id/tvTitle"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:id="@+id/llName"
-        android:layout_below="@+id/tvTitle"
+        android:layout_alignParentTop="true"
         >
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Name"
-            android:id="@+id/tvName"/>
 
         <EditText
             android:layout_width="wrap_content"
@@ -92,8 +78,8 @@
         android:layout_below="@+id/llDays"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_alignLeft="@+id/tvTitle"
-        android:layout_alignStart="@+id/tvTitle" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 
 </RelativeLayout>

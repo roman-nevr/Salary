@@ -7,6 +7,7 @@ import java.util.ArrayList;
  */
 public class Employee {
 
+    private int id;
     private String name;
     private float coefficient;
     private int startBalance;
@@ -55,6 +56,12 @@ public class Employee {
         this.balance = balance;
     }
 
+    public Employee(int id, String name, float coefficient) {
+        this.id = id;
+        this.name = name;
+        this.coefficient = coefficient;
+    }
+
     public String getComment() {
         return comment;
     }
@@ -91,4 +98,12 @@ public class Employee {
     public float getCoefficient() {return coefficient;}
 
     public void setCoefficient(float coefficient) {this.coefficient = coefficient;}
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 }

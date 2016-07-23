@@ -95,8 +95,8 @@ public class Salary {
 
     public Salary (){
 
-        this.employees = new ArrayList<>(Arrays.asList(new Employee("Roman",1.2f, 16000), new Employee("Vitek", 1.2f, -16000), new Employee("Leha", 1.1f, 13000),
-                                                             new Employee("Shurik", 1.2f, -16000), new Employee("Ivan", 1.2f, -16000), new Employee("Den", 1.2f, 13000)));
+        this.employees = new ArrayList<>(Arrays.asList(new Employee(0,"Roman",1.2f), new Employee(1, "Vitek", 1.2f), new Employee(2, "Leha", 1.1f),
+                                                             new Employee(3, "Shurik", 1.2f), new Employee(4, "Ivan", 1.2f), new Employee(5, "Den", 1.2f)));
         this.employeesSalary = new ArrayList<>(Arrays.asList(new Integer(20000), new Integer(10000),new Integer(20000), new Integer(12000),new Integer(12000),new Integer(12000)));
         this.amountsOfDays = new ArrayList<>(Arrays.asList(new Float(22), new Float(22),new Float(22), new Float(22), new Float(22), new Float(22)));
         this.date = new Date();

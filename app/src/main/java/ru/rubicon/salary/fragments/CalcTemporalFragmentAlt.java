@@ -15,6 +15,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import java.util.ArrayList;
+
+import ru.rubicon.salary.DAO.EmployeeDataSource;
 import ru.rubicon.salary.EmployeeDialogActivity;
 import ru.rubicon.salary.R;
 import ru.rubicon.salary.adapter.EmployeeItemListAdapterAlt;
@@ -35,12 +38,18 @@ public class CalcTemporalFragmentAlt extends Fragment implements EmployeeItemLis
     private BaseAdapter adapter;
     private Button btnCalc;
 
+    private EmployeeDataSource dataSource;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         isEtTotalFocused = false;
         salary = new Salary();
+        dataSource = new EmployeeDataSource(getContext());
+        dataSource.open();
+        ArrayList<Employee> employees = dataSource.readAllEmployees();
+        salary.setEmployees(employees);
     }
 
     @Override
@@ -130,9 +139,26 @@ public class CalcTemporalFragmentAlt extends Fragment implements EmployeeItemLis
         super.onActivityResult(requestCode, resultCode, data);
         int id = requestCode;
         if (resultCode == Activity.RESULT_OK){
-            salary.getEmployee(id).setCoefficient(data.getFloatExtra(EmployeeDialogFragment.DIALOG_COEF, 1.0f));
-            salary.setAmountOfDays(id, data.getFloatExtra(EmployeeDialogFragment.DIALOG_DAYS, 22.0f));
+            float coef = data.getFloatExtra(EmployeeDialogFragment.DIALOG_COEF, 0.0f);
+            salary.getEmployee(id).setCoefficient(coef);
+            salary.setAmountOfDays(id, data.getFloatExtra(EmployeeDialogFragment.DIALOG_DAYS, 0.0f));
+            dataSource.updateEmployee(id, coef);
+            ArrayList<Employee> employees = dataSource.readAllEmployees();
+            employees.add(new Employee(7,"", 0f));
         }
+
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onResume() {
+        dataSource.open();
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        dataSource.close();
+        super.onPause();
     }
 }

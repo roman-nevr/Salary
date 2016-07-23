@@ -1,9 +1,11 @@
 package ru.rubicon.salary.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 /**
@@ -25,5 +27,8 @@ public class utils {
     }
     public static void snackBarLong(View view, String message){
         Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
+    }
+    public static void nop(){
+        /*dummy operation*/
     }
 }

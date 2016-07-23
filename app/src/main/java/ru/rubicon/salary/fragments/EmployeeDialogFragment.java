@@ -2,6 +2,7 @@ package ru.rubicon.salary.fragments;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -43,7 +45,7 @@ public class EmployeeDialogFragment extends DialogFragment {
             coef = 0f;
             amountOfDays = 0f;
         }
-        form= getActivity().getLayoutInflater().inflate(R.layout.employee_dialog, null);
+        form = getActivity().getLayoutInflater().inflate(R.layout.employee_dialog, null);
         etName = (EditText) form.findViewById(R.id.etName);
         etCoef = (EditText) form.findViewById(R.id.etCoef);
         etDays = (EditText) form.findViewById(R.id.etDays);
@@ -88,6 +90,7 @@ public class EmployeeDialogFragment extends DialogFragment {
                     showError(etDays);
                 }
                 getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, intent);
+                hideKeyboard();
                 dismiss();
             } catch (RuntimeException e) {
             }
@@ -106,5 +109,11 @@ public class EmployeeDialogFragment extends DialogFragment {
         editText.setError(getResources().getText(R.string.error_message));
         throw new RuntimeException();
     }
+
+    private void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(form.getWindowToken(), 0);
+    }
+
 
 }
