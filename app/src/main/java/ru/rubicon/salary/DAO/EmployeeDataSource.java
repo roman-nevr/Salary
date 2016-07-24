@@ -19,7 +19,7 @@ public class EmployeeDataSource {
     private SQLiteDatabase database;
     private DatabaseHelper dbHelper;
 
-    private String[] allColumns = {DatabaseHelper._ID, DatabaseHelper.EMPLOYEE_NAME, DatabaseHelper.EMPLOYEE_COEF};
+    private String[] allColumns = {DatabaseHelper._ID, DatabaseHelper.EMPLOYEE_NAME, DatabaseHelper.EMPLOYEE_COEF, DatabaseHelper.EMPLOYEE_ACTIVITY, DatabaseHelper.CASH_COMMENT};
 
     public EmployeeDataSource(Context context) {
         dbHelper = DatabaseHelper.getInstance(context);
@@ -53,10 +53,12 @@ public class EmployeeDataSource {
         employee.setId(cursor.getInt(0));
         employee.setName(cursor.getString(1));
         employee.setCoefficient(cursor.getFloat(2));
+        employee.setActive(cursor.getInt(3));
+        employee.setComment(cursor.getString(4));
         return employee;
     }
 
-    public Employee readEmployee(){
+    public Employee readEmployee(int id){
         return new Employee("name", 1);
     }
 
@@ -64,6 +66,8 @@ public class EmployeeDataSource {
         ContentValues contentValues = new ContentValues();
         contentValues.put(DatabaseHelper.EMPLOYEE_NAME, employee.getName());
         contentValues.put(DatabaseHelper.EMPLOYEE_COEF, employee.getCoefficient());
+        contentValues.put(DatabaseHelper.EMPLOYEE_ACTIVITY, employee.isActive());
+        contentValues.put(DatabaseHelper.EMPLOYEE_COMMENT, employee.getComment());
         long id = database.update(DatabaseHelper.DATABASE_TABLE_EMPLOYEES, contentValues, ""+BaseColumns._ID + " = ?", new String[]{""+employee.getId()});
         utils.nop();
     }
@@ -75,5 +79,12 @@ public class EmployeeDataSource {
         utils.nop();
     }
 
-
+    public void saveEmployee(Employee employee){
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DatabaseHelper.EMPLOYEE_NAME, employee.getName());
+        contentValues.put(DatabaseHelper.EMPLOYEE_COEF, employee.getCoefficient());
+        contentValues.put(DatabaseHelper.EMPLOYEE_COMMENT, employee.getComment());
+        contentValues.put(DatabaseHelper.EMPLOYEE_ACTIVITY, employee.isActive());
+        database.insert(DatabaseHelper.DATABASE_TABLE_EMPLOYEES, null, contentValues);
+    }
 }

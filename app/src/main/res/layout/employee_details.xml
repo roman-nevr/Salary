@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp">
+    android:padding="10dp"
+    tools:context=".NavigationScreen">
 
     <TextView
         android:layout_width="match_parent"
@@ -57,7 +59,7 @@
             android:hint="Input coefficient"
             android:text="" />
     </LinearLayout>
-
+<!--
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -77,13 +79,13 @@
             android:ems="10"
             android:id="@+id/etStartBalance"
             android:text="" />
-    </LinearLayout>
+    </LinearLayout> -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:id="@+id/llComment"
-        android:layout_below="@+id/llBalance"
+        android:layout_below="@+id/llCoef"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
         <TextView
@@ -122,6 +124,7 @@
             android:layout_gravity="top"
             android:scaleX="2"
             android:scaleY="2"
+            android:checked="false"
             android:textSize="30dp"/>
 
     </LinearLayout>
@@ -137,7 +140,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Save"
-        android:id="@+id/button2"
+        android:id="@+id/btnSave"
         android:layout_below="@+id/llCheck"
         android:layout_alignLeft="@+id/textView2"
         android:layout_alignStart="@+id/textView2"

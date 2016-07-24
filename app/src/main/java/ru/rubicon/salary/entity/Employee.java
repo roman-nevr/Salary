@@ -93,17 +93,16 @@ public class Employee {
 
     public void setActive(boolean active) {this.active = active;}
 
+    public void setActive(int active) { this.active = (active == 1);}
+
     public int getBalance() {return balance;}
 
     public float getCoefficient() {return coefficient;}
 
     public void setCoefficient(float coefficient) {this.coefficient = coefficient;}
 
-    public int getId() {
-        return id;
-    }
+    public int getId() {return id; }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    public void setId(int id) {this.id = id; }
+
 }

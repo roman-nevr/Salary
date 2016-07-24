@@ -18,7 +18,7 @@ import ru.rubicon.salary.utils.utils;
  */
 public class DatabaseHelper extends SQLiteOpenHelper implements BaseColumns{
 
-    public static final int DATABASE_VERSION = 2;
+    public static final int DATABASE_VERSION = 3;
     public static final String DATABASE_NAME = "salary.db";
 
     public static final String DATABASE_TABLE_EMPLOYEES = "employees";
@@ -88,6 +88,7 @@ public class DatabaseHelper extends SQLiteOpenHelper implements BaseColumns{
                 values.put(BaseColumns._ID, employee.getId());
                 values.put(EMPLOYEE_NAME, employee.getName());
                 values.put(EMPLOYEE_COEF, employee.getCoefficient());
+                values.put(EMPLOYEE_ACTIVITY, true);
                 db.insert(DATABASE_TABLE_EMPLOYEES, null, values);
             }
         }

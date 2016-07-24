@@ -111,11 +111,9 @@ public class CalcTemporalFragmentAlt extends Fragment implements EmployeeItemLis
 
     @Override
     public void OnListItemClick(int position) {
-       /* Intent intent = new Intent(getActivity(), EmployeeDialogActivity.class);
-        startActivityForResult(intent, position);*/
-        hideKeyboard();
         EmployeeCalcDialogFragment employeeDialogFragment = new EmployeeCalcDialogFragment();
         Bundle bundle = new Bundle();
+        bundle.putInt(EmployeeCalcDialogFragment.DIALOG_ID, salary.getEmployee(position).getId());
         bundle.putFloat(EmployeeCalcDialogFragment.DIALOG_COEF, salary.getEmployee(position).getCoefficient());
         bundle.putFloat(EmployeeCalcDialogFragment.DIALOG_DAYS, salary.getAmountOfDays(position));
         bundle.putString(EmployeeCalcDialogFragment.DIALOG_NAME, salary.getEmployee(position).getName());
@@ -143,8 +141,8 @@ public class CalcTemporalFragmentAlt extends Fragment implements EmployeeItemLis
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        int id = requestCode;
         if (resultCode == Activity.RESULT_OK){
+            int id = data.getIntExtra(EmployeeCalcDialogFragment.DIALOG_ID,-1);
             float coef = data.getFloatExtra(EmployeeCalcDialogFragment.DIALOG_COEF, 0.0f);
             salary.getEmployee(id).setCoefficient(coef);
             salary.setAmountOfDays(id, data.getFloatExtra(EmployeeCalcDialogFragment.DIALOG_DAYS, 0.0f));

@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,10 +26,12 @@ public class EmployeeCalcDialogFragment extends DialogFragment {
     private Employee employee;
     private float amountOfDays;
     private float coef;
+    private int id;
     private EditText etDays, etCoef;
     private TextView tvName;
     private Button btnSave;
 
+    public static final String DIALOG_ID = "id";
     public static final String DIALOG_NAME = "name";
     public static final String DIALOG_DAYS = "days";
     public static final String DIALOG_COEF = "coef";
@@ -41,9 +42,11 @@ public class EmployeeCalcDialogFragment extends DialogFragment {
         Bundle bundle = getArguments();
         String name = bundle.getString(DIALOG_NAME);
         if (name != null){
+            id = bundle.getInt(DIALOG_ID);
             coef = bundle.getFloat(DIALOG_COEF);
             amountOfDays = bundle.getFloat(DIALOG_DAYS);
         }else {
+            id = -1;
             coef = 0f;
             amountOfDays = 0f;
         }
@@ -88,6 +91,7 @@ public class EmployeeCalcDialogFragment extends DialogFragment {
                 } catch (NumberFormatException e) {
                     showError(etDays);
                 }
+                intent.putExtra(DIALOG_ID, id);
                 getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, intent);
                 //hideKeyboard();
                 dismiss();
