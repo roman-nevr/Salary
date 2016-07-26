@@ -9,10 +9,13 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import ru.rubicon.salary.DAO.SalaryDataSource;
 import ru.rubicon.salary.adapter.MainActivityAdapter;
 import ru.rubicon.salary.entity.Employee;
 
 import static ru.rubicon.salary.utils.utils.log;
+import static ru.rubicon.salary.utils.utils.nop;
 
 /**
  * Created by roma on 17.06.2016.
@@ -20,6 +23,7 @@ import static ru.rubicon.salary.utils.utils.log;
 public class SalaryListFragment extends ListFragment {
 
     OnItemClickObserver mCallback;
+    private SalaryDataSource dataSource;
 
     // Container Activity must implement this interface
     public interface OnItemClickObserver {
@@ -43,6 +47,7 @@ public class SalaryListFragment extends ListFragment {
         ListAdapter adapter = new MainActivityAdapter(getContext(), employees);
         setListAdapter(adapter);
         setRetainInstance(true);
+
     }
 
     @Override

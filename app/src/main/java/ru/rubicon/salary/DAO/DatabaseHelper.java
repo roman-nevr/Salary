@@ -2,7 +2,6 @@ package ru.rubicon.salary.DAO;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
@@ -31,6 +30,11 @@ public class DatabaseHelper extends SQLiteOpenHelper implements BaseColumns{
 
     public static final String DATABASE_TABLE_FINANCE = "salaries";
     public static final String CASH_DATE = "date";
+    public static final String CASH_TOTAL = "total";
+    public static final String CASH_EMPLOYEE_IDS = "ids";
+    public static final String CASH_COEFS = "coefs";
+    public static final String CASH_DAYS = "days";
+    public static final String CASH_SUMS = "sums";
     public static final String CASH_OWNER = "owner";
     public static final String CASH_FLOW = "cash";
     public static final String CASH_COMMENT = "comment";
@@ -59,26 +63,40 @@ public class DatabaseHelper extends SQLiteOpenHelper implements BaseColumns{
                 EMPLOYEE_BALANCE + " integer, " +
                 EMPLOYEE_ACTIVITY + " integer, " +
                 EMPLOYEE_COMMENT + " text);";
-        String script_salaries = "create table " + DATABASE_TABLE_FINANCE;
+        String script_salaries = "create table " + DATABASE_TABLE_FINANCE + " (" +
+                BaseColumns._ID + " integer primary key autoincrement, " +
+                CASH_DATE + " integer, " +
+                CASH_TOTAL + " integer, " +
+                CASH_EMPLOYEE_IDS + " text, " +
+                CASH_COEFS + " text, " +
+                CASH_DAYS + " text, " +
+                CASH_SUMS + " text, " +
+                CASH_COMMENT + " text);";
         db.execSQL(script_employee);
-        fillDataBase(db);
+        fillEmployeeDataBase(db);
+        db.execSQL(script_salaries);
+        //fillSalaryTable(db);
+    }
 
+    private void fillSalaryTable(SQLiteDatabase db) {
 
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + DATABASE_TABLE_EMPLOYEES);
+        db.execSQL("DROP TABLE IF EXISTS " + DATABASE_TABLE_FINANCE);
         onCreate(db);
     }
 
     @Override
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + DATABASE_TABLE_EMPLOYEES);
+        db.execSQL("DROP TABLE IF EXISTS " + DATABASE_TABLE_FINANCE);
         onCreate(db);
     }
 
-    public void fillDataBase(SQLiteDatabase db){
+    public void fillEmployeeDataBase(SQLiteDatabase db){
         ArrayList<Employee> employees = new Salary().getEmployees();
         if( db != null ){
             ContentValues values;

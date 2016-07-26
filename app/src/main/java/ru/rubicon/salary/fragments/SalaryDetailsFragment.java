@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 
+import ru.rubicon.salary.DAO.SalaryDataSource;
 import ru.rubicon.salary.R;
 import ru.rubicon.salary.adapter.EmployeesSalaryListAdapter;
 import ru.rubicon.salary.entity.Employee;
@@ -24,6 +25,9 @@ import static ru.rubicon.salary.utils.utils.log;
  * Created by roma on 22.06.2016.
  */
 public class SalaryDetailsFragment extends Fragment {
+
+    SalaryDataSource dataSource;
+
     OnItemClickObserver mCallback;
     public interface OnItemClickObserver {
         public void onSalaryDetailsItemClick(int position);
@@ -47,7 +51,11 @@ public class SalaryDetailsFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-        salaries = new ArrayList<>(Arrays.asList(new Salary(140000, new Date()), new Salary(160000, new Date())));
+        //salaries = new ArrayList<>(Arrays.asList(new Salary(140000, new Date()), new Salary(160000, new Date())));
+        dataSource = new SalaryDataSource(getContext());
+        dataSource.open();
+        salaries = dataSource.readAllSalaries();
+        dataSource.close();
     }
 
     @Override

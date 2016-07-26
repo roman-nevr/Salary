@@ -4,22 +4,27 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 
+import ru.rubicon.salary.utils.interfaces;
+
 /**
  * Created by roma on 17.06.2016.
  */
-public class Salary {
-    private Date date;
+public class Salary implements interfaces.id {
+    private int id;
+    private long date;
     private int total;
     private ArrayList<Employee> employees;
     private ArrayList<Integer> employeesSalary;
     private ArrayList<Float> amountsOfDays;
+    private String comment;
 
-    public Salary(int total, Date date) {
+    public Salary(int total, long date) {
         this.total = total;
         this.date = date;
     }
 
-    public Salary(Date date, int total, ArrayList<Employee> employees, ArrayList<Integer> employeesSalary, ArrayList<Float> amountsOfDays) {
+    public Salary(int id, long date, int total, ArrayList<Employee> employees, ArrayList<Integer> employeesSalary, ArrayList<Float> amountsOfDays) {
+        this.id = id;
         this.date = date;
         this.total = total;
         this.employees = employees;
@@ -27,9 +32,9 @@ public class Salary {
         this.amountsOfDays = amountsOfDays;
     }
 
-    public Date getDate() {return date;}
+    public long getDate() {return date;}
 
-    public void setDate(Date date) {this.date = date;}
+    public void setDate(long date) {this.date = date;}
 
     public int getTotal() {return total;}
 
@@ -93,16 +98,35 @@ public class Salary {
         employees.get(id).setCoefficient(value);
     }
 
+    public int getId() {        return id;    }
+
+    public void setId(int id) {        this.id = id;    }
+
+    public ArrayList<Float> getAmountsOfDays() {        return amountsOfDays;    }
+
+    public ArrayList<Integer> getEmployeesSalary() {        return employeesSalary;    }
+
+    public String getComment() {        return comment;    }
+
+    public void setComment(String comment) {        this.comment = comment;    }
+
+    public void setEmployeesSalary(ArrayList<Integer> employeesSalary) {        this.employeesSalary = employeesSalary;    }
+
     public Salary (){
 
         this.employees = new ArrayList<>(Arrays.asList(new Employee(0,"Roman",1.2f), new Employee(1, "Vitek", 1.2f), new Employee(2, "Leha", 1.1f),
                                                              new Employee(3, "Shurik", 1.2f), new Employee(4, "Ivan", 1.2f), new Employee(5, "Den", 1.2f)));
         this.employeesSalary = new ArrayList<>(Arrays.asList(new Integer(20000), new Integer(10000),new Integer(20000), new Integer(12000),new Integer(12000),new Integer(12000)));
         this.amountsOfDays = new ArrayList<>(Arrays.asList(new Float(22), new Float(22),new Float(22), new Float(22), new Float(22), new Float(22)));
-        this.date = new Date();
+        this.date = new Date().getTime();
         this.total = 140000;
         /*amountOfDays.add(new Float(20.0));
         amountOfDays.add(new Float(5.5));*/
+    }
 
+    public Salary(int id, long date, int total) {
+        this.id = id;
+        this.total = total;
+        this.date = date;
     }
 }

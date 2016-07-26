@@ -69,7 +69,7 @@ public class CalcTemporalFragment extends Fragment implements EmployeeItemListAd
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
 
-        salary = new Salary();
+        //salary = Salary.ge;
         isEtTotalFocused = false;
 
 

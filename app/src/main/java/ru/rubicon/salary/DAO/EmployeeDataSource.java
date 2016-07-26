@@ -29,6 +29,10 @@ public class EmployeeDataSource {
         database = dbHelper.getWritableDatabase();
     }
 
+    public void openForRead() throws SQLException {
+        database = dbHelper.getReadableDatabase();
+    }
+
     public void close() {
         dbHelper.close();
     }

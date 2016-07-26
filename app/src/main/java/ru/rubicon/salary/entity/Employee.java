@@ -2,10 +2,12 @@ package ru.rubicon.salary.entity;
 
 import java.util.ArrayList;
 
+import ru.rubicon.salary.utils.interfaces;
+
 /**
  * Created by roma on 03.06.2016.
  */
-public class Employee {
+public class Employee implements interfaces.id {
 
     private int id;
     private String name;
