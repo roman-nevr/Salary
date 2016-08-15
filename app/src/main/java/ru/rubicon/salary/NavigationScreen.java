@@ -18,6 +18,8 @@ import android.view.View;
 import android.view.WindowManager;
 
 import java.util.List;
+
+import ru.rubicon.salary.DAO.DatabaseHelper;
 import ru.rubicon.salary.entity.Employee;
 import ru.rubicon.salary.fragments.CalcTemporalFragment;
 import ru.rubicon.salary.fragments.CalcTemporalFragmentAlt;
@@ -30,10 +32,7 @@ import ru.rubicon.salary.utils.utils;
 /**
  * Created by roma on 07.06.2016.
  */
-public class NavigationScreen extends AppCompatActivity implements
-                        SalaryListFragment.OnItemClickObserver,
-
-                        SalaryDetailsFragment.OnItemClickObserver{
+public class NavigationScreen extends AppCompatActivity implements SalaryListFragment.OnItemClickObserver{
 
     private DrawerLayout mDrawerLayout;
     private NavigationView mDrawerView;
@@ -83,16 +82,13 @@ public class NavigationScreen extends AppCompatActivity implements
         context.startActivity(intent);
     }
 
-
     @Override
     public void onSalaryItemClick(int position) {
-        utils.snackBarShort(clMainList, "Salary id "+position);
-        showSalaryDetailsFragment();
-    }
-
-    @Override
-    public void onSalaryDetailsItemClick(int position) {
-
+        CalcTemporalFragmentAlt calcFragment = new CalcTemporalFragmentAlt();
+        Bundle bundle = new Bundle();
+        bundle.putInt(DatabaseHelper._ID, position);
+        calcFragment.setArguments(bundle);
+        showNewFragmentWithBackStack(calcFragment, TAG_4);
     }
 
 

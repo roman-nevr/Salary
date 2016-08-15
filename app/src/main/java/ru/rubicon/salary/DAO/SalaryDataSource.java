@@ -2,7 +2,6 @@ package ru.rubicon.salary.DAO;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -11,7 +10,6 @@ import java.util.ArrayList;
 
 import ru.rubicon.salary.entity.Employee;
 import ru.rubicon.salary.entity.Salary;
-import ru.rubicon.salary.utils.interfaces;
 
 /**
  * Created by admin on 26.07.2016.
@@ -75,18 +73,18 @@ public class SalaryDataSource {
         Salary salary = new Salary();
         Cursor cursor = database.query(DatabaseHelper.DATABASE_TABLE_FINANCE,
                 allColumns, null, null, null, null, null);
-
+        cursor.moveToFirst();
         salary.setId(cursor.getInt(0));
         salary.setTotal(cursor.getInt(2));
         salary.setEmployees(cursorToEmployeesArrayList(cursor, all));
         salary.setAmountsOfDays(stringToFloatArrayList(cursor.getString(5)));
-        salary.setEmployeesSalary(stringToIntegerArrayList(cursor.getString(6)));
+        salary.setEmployeeSalaries(stringToIntegerArrayList(cursor.getString(6)));
         salary.setComment(cursor.getString(7));
         cursor.close();
         return salary;
     }
 
-    private String floatArrayListToString (ArrayList<Float> list){
+    static String floatArrayListToString (ArrayList<Float> list){
         StringBuilder builder = new StringBuilder();
         for (Number item : list ) {
             builder.append(item);
@@ -95,7 +93,7 @@ public class SalaryDataSource {
         return builder.toString();
     }
 
-    private String integerArrayListToString (ArrayList<Integer> list){
+    static String integerArrayListToString (ArrayList<Integer> list){
         StringBuilder builder = new StringBuilder();
         for (Integer item: list ) {
             builder.append(item);
@@ -104,7 +102,7 @@ public class SalaryDataSource {
         return builder.toString();
     }
 
-    private ArrayList<Integer> stringToIntegerArrayList(String string){
+    static ArrayList<Integer> stringToIntegerArrayList(String string){
         ArrayList<Integer> list = new ArrayList<>();
         String items[] = string.split(CHAR);
         for (String item : items) {
@@ -113,7 +111,7 @@ public class SalaryDataSource {
         return list;
     }
 
-    private ArrayList<Float> stringToFloatArrayList(String string){
+    static ArrayList<Float> stringToFloatArrayList(String string){
         ArrayList<Float> list = new ArrayList<>();
         String items[] = string.split(CHAR);
         for (String item : items) {
@@ -122,7 +120,7 @@ public class SalaryDataSource {
         return list;
     }
 
-    private String employeeIdsToString(Salary salary){
+    static String employeeIdsToString(Salary salary){
         ArrayList<Employee> employees = salary.getEmployees();
         StringBuilder builder = new StringBuilder();
         for (Employee employee: employees){
@@ -132,7 +130,7 @@ public class SalaryDataSource {
         return builder.toString();
     }
 
-    private String employeeCoefsToString(Salary salary){
+    static String employeeCoefsToString(Salary salary){
         ArrayList<Employee> employees = salary.getEmployees();
         StringBuilder builder = new StringBuilder();
         for (Employee employee: employees){

@@ -14,7 +14,7 @@ public class Salary implements interfaces.id {
     private long date;
     private int total;
     private ArrayList<Employee> employees;
-    private ArrayList<Integer> employeesSalary;
+    private ArrayList<Integer> employeeSalaries;
     private ArrayList<Float> amountsOfDays;
     private String comment;
 
@@ -23,12 +23,12 @@ public class Salary implements interfaces.id {
         this.date = date;
     }
 
-    public Salary(int id, long date, int total, ArrayList<Employee> employees, ArrayList<Integer> employeesSalary, ArrayList<Float> amountsOfDays) {
+    public Salary(int id, long date, int total, ArrayList<Employee> employees, ArrayList<Integer> employeeSalaries, ArrayList<Float> amountsOfDays) {
         this.id = id;
         this.date = date;
         this.total = total;
         this.employees = employees;
-        this.employeesSalary = employeesSalary;
+        this.employeeSalaries = employeeSalaries;
         this.amountsOfDays = amountsOfDays;
     }
 
@@ -48,11 +48,11 @@ public class Salary implements interfaces.id {
         return employees.get(id);
     }
 
-    public ArrayList<Integer> getEmployeeSalary() {return employeesSalary;}
+    public ArrayList<Integer> getEmployeeSalary() {return employeeSalaries;}
 
     public void setEmployeeSalary(Employee employee, int employeeSalary) throws NullPointerException{
         int id = employees.indexOf(employee);
-        employeesSalary.set(id, employeeSalary);
+        employeeSalaries.set(id, employeeSalary);
     }
 
     public void setAmountsOfDays(ArrayList<Float> amountsOfDays) {this.amountsOfDays = amountsOfDays;}
@@ -82,7 +82,7 @@ public class Salary implements interfaces.id {
     }
 
     public void calculateSalary(){
-        employeesSalary = new ArrayList<>();
+        employeeSalaries = new ArrayList<>();
         float totalBase = calcTotalBase();
         int concreteSalary = 0;
         for (int id = 0; id < employees.size(); id++){
@@ -90,7 +90,7 @@ public class Salary implements interfaces.id {
             float a = amountsOfDays.get(id);
             concreteSalary = Math.round(employees.get(id).getCoefficient() * amountsOfDays.get(id)
                     / totalBase * total);
-            employeesSalary.add(concreteSalary);
+            employeeSalaries.add(concreteSalary);
         }
     }
 
@@ -104,19 +104,19 @@ public class Salary implements interfaces.id {
 
     public ArrayList<Float> getAmountsOfDays() {        return amountsOfDays;    }
 
-    public ArrayList<Integer> getEmployeesSalary() {        return employeesSalary;    }
+    public ArrayList<Integer> getEmployeeSalaries() {        return employeeSalaries;    }
 
     public String getComment() {        return comment;    }
 
     public void setComment(String comment) {        this.comment = comment;    }
 
-    public void setEmployeesSalary(ArrayList<Integer> employeesSalary) {        this.employeesSalary = employeesSalary;    }
+    public void setEmployeeSalaries(ArrayList<Integer> employeeSalaries) {        this.employeeSalaries = employeeSalaries;    }
 
     public Salary (){
 
-        this.employees = new ArrayList<>(Arrays.asList(new Employee(0,"Roman",1.2f), new Employee(1, "Vitek", 1.2f), new Employee(2, "Leha", 1.1f),
-                                                             new Employee(3, "Shurik", 1.2f), new Employee(4, "Ivan", 1.2f), new Employee(5, "Den", 1.2f)));
-        this.employeesSalary = new ArrayList<>(Arrays.asList(new Integer(20000), new Integer(10000),new Integer(20000), new Integer(12000),new Integer(12000),new Integer(12000)));
+        this.employees = new ArrayList<>(Arrays.asList(new Employee(0,"Roman",1.8f), new Employee(1, "Vitek", 1.8f), new Employee(2, "Leha", 1.1f),
+                                                             new Employee(3, "Shurik", 1.8f), new Employee(4, "Ivan", 1.5f), new Employee(5, "Den", 1.5f)));
+        this.employeeSalaries = new ArrayList<>(Arrays.asList(new Integer(20000), new Integer(10000),new Integer(20000), new Integer(12000),new Integer(12000),new Integer(12000)));
         this.amountsOfDays = new ArrayList<>(Arrays.asList(new Float(22), new Float(22),new Float(22), new Float(22), new Float(22), new Float(22)));
         this.date = new Date().getTime();
         this.total = 140000;

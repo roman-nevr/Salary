@@ -37,7 +37,7 @@ public class EmployeesListFragment extends ListFragment {
 
         // employees = new ArrayList<Employee>(Arrays.asList(new Employee("Roman", 16000), new Employee("Shurik", -16000)));
         dataSource = new EmployeeDataSource(getContext());
-        dataSource.open();
+        dataSource.openForRead();
         employees = dataSource.readAllEmployees();
         dataSource.close();
 
@@ -69,7 +69,7 @@ public class EmployeesListFragment extends ListFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == Activity.RESULT_OK){
-            dataSource.open();
+            dataSource.openForRead();
             employees = dataSource.readAllEmployees();
             dataSource.close();
             adapter.notifyDataSetInvalidated();

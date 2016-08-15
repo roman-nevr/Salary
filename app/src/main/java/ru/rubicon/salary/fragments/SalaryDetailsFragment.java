@@ -10,13 +10,10 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 
 import ru.rubicon.salary.DAO.SalaryDataSource;
 import ru.rubicon.salary.R;
-import ru.rubicon.salary.adapter.EmployeesSalaryListAdapter;
-import ru.rubicon.salary.entity.Employee;
+import ru.rubicon.salary.adapter.EmployeeSalariesListAdapter;
 import ru.rubicon.salary.entity.Salary;
 
 import static ru.rubicon.salary.utils.utils.log;
@@ -65,7 +62,7 @@ public class SalaryDetailsFragment extends Fragment {
         //String catName = launchingIntent.getStringExtra("catname");
         View viewer = inflater.inflate(R.layout.salary_details, container, false);
         lvEmployeesSalaryList = (ListView) viewer.findViewById(R.id.lvEmployeesSalaryList);
-        lvEmployeesSalaryList.setAdapter(new EmployeesSalaryListAdapter(getContext(), salaries));
+        lvEmployeesSalaryList.setAdapter(new EmployeeSalariesListAdapter(getContext(), salaries));
         //mCatDescriptionTextView = (TextView) viewer.findViewById(R.id.textViewDescription);
 
         log("details");

@@ -17,7 +17,7 @@ import ru.rubicon.salary.utils.utils;
  */
 public class DatabaseHelper extends SQLiteOpenHelper implements BaseColumns{
 
-    public static final int DATABASE_VERSION = 3;
+    public static final int DATABASE_VERSION = 5;
     public static final String DATABASE_NAME = "salary.db";
 
     public static final String DATABASE_TABLE_EMPLOYEES = "employees";
@@ -75,7 +75,7 @@ public class DatabaseHelper extends SQLiteOpenHelper implements BaseColumns{
         db.execSQL(script_employee);
         fillEmployeeDataBase(db);
         db.execSQL(script_salaries);
-        //fillSalaryTable(db);
+        fillSalaryDatabase(db);
     }
 
     private void fillSalaryTable(SQLiteDatabase db) {
@@ -112,6 +112,39 @@ public class DatabaseHelper extends SQLiteOpenHelper implements BaseColumns{
         }
         else {
             utils.log("database is null");
+        }
+    }
+
+    public void fillSalaryDatabase(SQLiteDatabase db){
+        ArrayList<Salary> salaries = new ArrayList<>();
+        salaries.add(new Salary());
+        salaries.add(new Salary());
+        salaries.get(1).setTotal(130000);
+        salaries.get(0).calculateSalary();
+        salaries.get(1).calculateSalary();
+
+        if(db != null){
+            ContentValues values;
+            for(Salary salary:salaries){
+                values = new ContentValues();
+                values.put(CASH_DATE, salary.getDate());
+                values.put(CASH_TOTAL, salary.getTotal());
+                values.put(CASH_EMPLOYEE_IDS, SalaryDataSource.employeeIdsToString(salary));
+                values.put(CASH_COEFS, SalaryDataSource.employeeCoefsToString(salary));
+                values.put(CASH_DAYS,SalaryDataSource.floatArrayListToString(salary.getAmountsOfDays()));
+                values.put(CASH_SUMS, SalaryDataSource.integerArrayListToString(salary.getEmployeeSalaries()));
+                db.insert(DATABASE_TABLE_FINANCE, null, values);
+                /*
+                BaseColumns._ID + " integer primary key autoincrement, " +
+                CASH_DATE + " integer, " +
+                CASH_TOTAL + " integer, " +
+                CASH_EMPLOYEE_IDS + " text, " +
+                CASH_COEFS + " text, " +
+                CASH_DAYS + " text, " +
+                CASH_SUMS + " text, " +
+                CASH_COMMENT + " text);";
+                 */
+            }
         }
     }
 }

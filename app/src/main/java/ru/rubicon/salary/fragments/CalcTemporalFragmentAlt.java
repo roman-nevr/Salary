@@ -16,7 +16,9 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
+import ru.rubicon.salary.DAO.DatabaseHelper;
 import ru.rubicon.salary.DAO.EmployeeDataSource;
+import ru.rubicon.salary.DAO.SalaryDataSource;
 import ru.rubicon.salary.R;
 import ru.rubicon.salary.adapter.EmployeeItemListAdapterAlt;
 import ru.rubicon.salary.entity.Employee;
@@ -36,23 +38,52 @@ public class CalcTemporalFragmentAlt extends Fragment implements EmployeeItemLis
     private BaseAdapter adapter;
     private Button btnCalc;
 
-    private EmployeeDataSource dataSource;
+    private EmployeeDataSource employeeDataSource;
+    private SalaryDataSource salaryDataSource;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         isEtTotalFocused = false;
-        dataSource = new EmployeeDataSource(getContext());
-        dataSource.open();
-        salary = performSalary();
+        employeeDataSource = new EmployeeDataSource(getContext());
+        salaryDataSource = new SalaryDataSource(getContext());
+        Bundle bundle = getArguments();
+        salary = performSalary(bundle);
     }
 
-    private Salary performSalary() {
+    private Salary performSalary(Bundle data) { //1st - new calculation; 2nd - edit salary; 3rd - add new calculation with total and days
+        employeeDataSource.open();
+        ArrayList<Employee> employees = employeeDataSource.readAllEmployees();
+        employeeDataSource.close();
         salary = new Salary();
-        ArrayList<Employee> employees = dataSource.readAllEmployees();
+        if (data == null){
+            //1st
+            salary.setEmployees(employees);
+            salary.calculateSalary();
+        }else {
+            int salaryId = data.getInt(DatabaseHelper._ID, -1);
+            if (salaryId == -1){
+                //3rd
+                int total = data.getInt(DatabaseHelper.CASH_TOTAL);
+                float days = data.getFloat(DatabaseHelper.CASH_DAYS);
+                salary.setTotal(total);
+                salary.setEmployees(employees);
+                ArrayList<Float> amountOfDays = new ArrayList<>(2);
+                for (int k = 0; k < employees.size(); k++){
+                    amountOfDays.add(days);
+                }
+                salary.setAmountsOfDays(amountOfDays);
+            }else {
+                salaryDataSource.openForRead();
+                salary = salaryDataSource.readSalary(salaryId, employees);
+                //2nd - load salary from database
+
+            }
+        }
+        /*ArrayList<Employee> employees = employeeDataSource.readAllEmployees();
         salary.setEmployees(employees);
-        salary.calculateSalary();
+        salary.calculateSalary();*/
         return salary;
     }
 
@@ -146,7 +177,7 @@ public class CalcTemporalFragmentAlt extends Fragment implements EmployeeItemLis
             float coef = data.getFloatExtra(EmployeeCalcDialogFragment.DIALOG_COEF, 0.0f);
             salary.getEmployee(id).setCoefficient(coef);
             salary.setAmountOfDays(id, data.getFloatExtra(EmployeeCalcDialogFragment.DIALOG_DAYS, 0.0f));
-            dataSource.updateEmployee(id, coef);
+            //employeeDataSource.updateEmployee(id, coef);
         }
 
         adapter.notifyDataSetChanged();
@@ -154,7 +185,7 @@ public class CalcTemporalFragmentAlt extends Fragment implements EmployeeItemLis
 
     @Override
     public void onResume() {
-        dataSource.open();
+        employeeDataSource.open();
         super.onResume();
     }
 
@@ -162,7 +193,7 @@ public class CalcTemporalFragmentAlt extends Fragment implements EmployeeItemLis
 
     @Override
     public void onPause() {
-        dataSource.close();
+        employeeDataSource.close();
         super.onPause();
         hideKeyboard();
     }
