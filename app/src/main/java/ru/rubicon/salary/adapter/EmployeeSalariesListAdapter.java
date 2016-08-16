@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import ru.rubicon.salary.R;
@@ -53,7 +54,11 @@ public class EmployeeSalariesListAdapter extends BaseAdapter {
         TextView tvDate = (TextView) view.findViewById(R.id.tvDate);
         int total = salaries.get(id).getTotal();
         tvTotal.setText(""+total);
-        tvDate.setText(""+salaries.get(id).getDate());
+
+        SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yy KK:mm");
+        String dateString = formatter.format(salaries.get(id).getDate());
+
+        tvDate.setText(dateString);
         return view;
     }
 }

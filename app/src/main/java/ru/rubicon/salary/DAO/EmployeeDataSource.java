@@ -33,9 +33,7 @@ public class EmployeeDataSource {
         database = dbHelper.getReadableDatabase();
     }
 
-    public void close() {
-        dbHelper.close();
-    }
+    public void close() {        dbHelper.close();    }
 
     public ArrayList<Employee> readAllEmployees(){
         ArrayList<Employee> employees = new ArrayList<>();
@@ -62,9 +60,9 @@ public class EmployeeDataSource {
         return employee;
     }
 
-    public Employee readEmployee(int id){
+    /*public Employee readEmployee(int id){
         return new Employee("name", 1);
-    }
+    }*/
 
     public void updateEmployee(Employee employee){
         ContentValues contentValues = new ContentValues();

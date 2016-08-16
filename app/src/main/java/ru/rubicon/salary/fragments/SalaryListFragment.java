@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.View;
+import android.widget.BaseAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
@@ -48,19 +49,13 @@ public class SalaryListFragment extends ListFragment {
     private EmployeeDataSource employeeDataSource;
     private ArrayList<Salary> salaries;
     private ArrayList<Employee> employees;
+    private BaseAdapter adapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         dataSource = new SalaryDataSource(getContext());
-        //employeeDataSource = new EmployeeDataSource(getContext());
-        dataSource.openForRead();
-        //employees = employeeDataSource.readAllEmployees();
-        salaries = dataSource.readAllSalaries();
-        dataSource.close();
 
-        ListAdapter adapter = new EmployeeSalariesListAdapter(getContext(), salaries);
-        setListAdapter(adapter);
         setRetainInstance(true);
 
     }
@@ -111,5 +106,16 @@ public class SalaryListFragment extends ListFragment {
          */
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        //employeeDataSource = new EmployeeDataSource(getContext());
+        dataSource.openForRead();
+        //employees = employeeDataSource.readAllEmployees();
+        salaries = dataSource.readAllSalaries();
+        dataSource.close();
 
+        adapter = new EmployeeSalariesListAdapter(getContext(), salaries);
+        setListAdapter(adapter);
+    }
 }

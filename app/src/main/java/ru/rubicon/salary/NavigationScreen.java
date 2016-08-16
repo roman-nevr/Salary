@@ -48,6 +48,7 @@ public class NavigationScreen extends AppCompatActivity implements SalaryListFra
     private static final String FRAGMENT = "fragment";
     private String currentTag;
     private FragmentManager fragmentManager;
+    private ICommand command;
 
 
     @Override
@@ -96,25 +97,16 @@ public class NavigationScreen extends AppCompatActivity implements SalaryListFra
         @Override
         public boolean onNavigationItemSelected(MenuItem item) {
             int itemId = item.getItemId();
+            command = new NopCommand();
             switch (itemId){
                 case R.id.nav_employee:{
                     showEmployeesFragment();
+                    command = new AddEmployee();
                     break;
                 }
                 case R.id.nav_salary:{
                     showSalaryFragment();
-                    break;
-                }
-                case R.id.nav_send:{
-                    addEmployee(new Employee("Еще один", 10000));
-                    break;
-                }
-                case R.id.nav_temp_calc:{
-                    showTempCalcFragment();
-                    break;
-                }
-                case R.id.nav_temp_calc_alt:{
-                    showTempCalcFragmentAlt();
+                    command = new AddSalary();
                     break;
                 }
             }
@@ -128,7 +120,8 @@ public class NavigationScreen extends AppCompatActivity implements SalaryListFra
     private class ActionButtonOnClickListener implements View.OnClickListener{
         @Override
         public void onClick(View view) {
-            utils.snackBarShort(view, "FAB clicked");
+            //utils.snackBarShort(view, "FAB clicked");
+            command.execute();
         }
     }
 
@@ -201,10 +194,16 @@ public class NavigationScreen extends AppCompatActivity implements SalaryListFra
             getSupportFragmentManager().beginTransaction().add(R.id.container, getFragmentByTag(TAG_1), TAG_1).commit();
             currentTag = TAG_1;
             toolbar.setTitle(TAG_1);
+            command = new AddEmployee();
         } else{
             String tag = data.getString(FRAGMENT);
             showNewFragment(getFragmentByTag(tag), tag);
             toolbar.setTitle(tag);
+            if(tag.equals(TAG_2)){
+                command = new AddSalary();
+            } else {
+                command = new NopCommand();
+            }
         }
     }
 
@@ -253,7 +252,29 @@ public class NavigationScreen extends AppCompatActivity implements SalaryListFra
         return null;
     }
 
+    private interface ICommand{
+        void execute();
+    }
 
+    private class AddSalary implements ICommand{
+        @Override
+        public void execute() {
+            showTempCalcFragmentAlt();
+        }
+    }
 
+    private class AddEmployee implements ICommand{
+        @Override
+        public void execute() {
+            utils.snackBarLong(actionButton, "Not designed");
+        }
+    }
+
+    private class NopCommand implements ICommand{
+        @Override
+        public void execute() {
+            utils.snackBarLong(actionButton, "Nothing added");
+        }
+    }
 
 }

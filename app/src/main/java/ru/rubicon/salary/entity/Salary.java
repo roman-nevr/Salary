@@ -1,5 +1,7 @@
 package ru.rubicon.salary.entity;
 
+import android.content.ContentValues;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -129,4 +131,5 @@ public class Salary implements interfaces.id {
         this.total = total;
         this.date = date;
     }
+
 }

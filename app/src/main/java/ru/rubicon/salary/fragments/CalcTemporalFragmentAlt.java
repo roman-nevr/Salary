@@ -37,6 +37,7 @@ public class CalcTemporalFragmentAlt extends Fragment implements EmployeeItemLis
     private boolean isEtTotalFocused;
     private BaseAdapter adapter;
     private Button btnCalc;
+    private SaveOrUpdate action;
 
     private EmployeeDataSource employeeDataSource;
     private SalaryDataSource salaryDataSource;
@@ -53,18 +54,21 @@ public class CalcTemporalFragmentAlt extends Fragment implements EmployeeItemLis
     }
 
     private Salary performSalary(Bundle data) { //1st - new calculation; 2nd - edit salary; 3rd - add new calculation with total and days
-        employeeDataSource.open();
+        employeeDataSource.openForRead();
         ArrayList<Employee> employees = employeeDataSource.readAllEmployees();
         employeeDataSource.close();
         salary = new Salary();
+        action = new SaveOrUpdate();
         if (data == null){
             //1st
             salary.setEmployees(employees);
             salary.calculateSalary();
+            action.setCommand(new Save());
         }else {
             int salaryId = data.getInt(DatabaseHelper._ID, -1);
             if (salaryId == -1){
                 //3rd
+                action.setCommand(new Save());
                 int total = data.getInt(DatabaseHelper.CASH_TOTAL);
                 float days = data.getFloat(DatabaseHelper.CASH_DAYS);
                 salary.setTotal(total);
@@ -77,13 +81,12 @@ public class CalcTemporalFragmentAlt extends Fragment implements EmployeeItemLis
             }else {
                 salaryDataSource.openForRead();
                 salary = salaryDataSource.readSalary(salaryId, employees);
+                salaryDataSource.close();
+                action.setCommand(new Update());
                 //2nd - load salary from database
 
             }
         }
-        /*ArrayList<Employee> employees = employeeDataSource.readAllEmployees();
-        salary.setEmployees(employees);
-        salary.calculateSalary();*/
         return salary;
     }
 
@@ -162,6 +165,8 @@ public class CalcTemporalFragmentAlt extends Fragment implements EmployeeItemLis
                 hideKeyboard();
                 salary.calculateSalary();
                 adapter.notifyDataSetChanged();
+                action.execute();
+                action.setCommand(new Update());
             }catch (NumberFormatException e){
                 utils.toastShort(getContext(), "Input error");
             }
@@ -185,7 +190,7 @@ public class CalcTemporalFragmentAlt extends Fragment implements EmployeeItemLis
 
     @Override
     public void onResume() {
-        employeeDataSource.open();
+
         super.onResume();
     }
 
@@ -193,8 +198,38 @@ public class CalcTemporalFragmentAlt extends Fragment implements EmployeeItemLis
 
     @Override
     public void onPause() {
-        employeeDataSource.close();
         super.onPause();
         hideKeyboard();
     }
+
+    private interface ICommand{
+        void execute();
+    }
+
+    private class SaveOrUpdate{
+        ICommand command;
+        void execute(){
+            salaryDataSource.open();
+            command.execute();
+            salaryDataSource.close();
+        }
+        void setCommand(ICommand command){
+            this.command = command;
+        }
+    }
+
+    private class Save implements ICommand{
+        @Override
+        public void execute() {
+            salaryDataSource.saveSalary(salary);
+        }
+    }
+
+    private class Update implements ICommand{
+        @Override
+        public void execute() {
+            salaryDataSource.updateSalary(salary);
+        }
+    }
+
 }

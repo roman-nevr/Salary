@@ -37,7 +37,7 @@ public class EmployeesListFragment extends ListFragment {
 
         // employees = new ArrayList<Employee>(Arrays.asList(new Employee("Roman", 16000), new Employee("Shurik", -16000)));
         dataSource = new EmployeeDataSource(getContext());
-        dataSource.openForRead();
+        dataSource.open();
         employees = dataSource.readAllEmployees();
         dataSource.close();
 

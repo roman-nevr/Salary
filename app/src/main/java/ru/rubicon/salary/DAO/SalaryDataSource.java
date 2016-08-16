@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.provider.BaseColumns;
 
 import java.util.ArrayList;
 
@@ -67,12 +68,29 @@ public class SalaryDataSource {
     }
 
     public void updateSalary(Salary salary){
+        ContentValues values = new ContentValues();
+        values.put(DatabaseHelper.CASH_DATE, salary.getDate());
+        values.put(DatabaseHelper.CASH_TOTAL, salary.getTotal());
+        values.put(DatabaseHelper.CASH_EMPLOYEE_IDS, employeeIdsToString(salary));
+        values.put(DatabaseHelper.CASH_COEFS, employeeCoefsToString(salary));
+        values.put(DatabaseHelper.CASH_DAYS,floatArrayListToString(salary.getAmountsOfDays()));
+        values.put(DatabaseHelper.CASH_SUMS, integerArrayListToString(salary.getEmployeeSalaries()));
+        values.put(DatabaseHelper.CASH_COMMENT, salary.getComment());
+        database.update(DatabaseHelper.DATABASE_TABLE_FINANCE, values, ""+ BaseColumns._ID + " = ?", new String[]{""+salary.getId()});
     }
 
     public Salary readSalary(int id, ArrayList<Employee> all){
         Salary salary = new Salary();
+        /*
+        String selection = DB_TASK_ID +" LIKE ?";
+        String[] selectionArgs = {String.valueOf(_id)};
+
+        Cursor cursor = db.query(DB_TABLE_NAME, null, selection, selectionArgs, null, null, null);
+         */
+        String selection = DatabaseHelper._ID + " LIKE ?";
+        String[] selectionArgs = {"" + id};
         Cursor cursor = database.query(DatabaseHelper.DATABASE_TABLE_FINANCE,
-                allColumns, null, null, null, null, null);
+                allColumns, selection, selectionArgs, null, null, null);
         cursor.moveToFirst();
         salary.setId(cursor.getInt(0));
         salary.setTotal(cursor.getInt(2));
@@ -150,17 +168,7 @@ public class SalaryDataSource {
             list.add(employee);
         }
         return list;
-        /*
-        private Employee cursorToEmployee(Cursor cursor){
-        Employee employee = new Employee(0,"", 0f);
-        employee.setId(cursor.getInt(0));
-        employee.setName(cursor.getString(1));
-        employee.setCoefficient(cursor.getFloat(2));
-        employee.setActive(cursor.getInt(3));
-        employee.setComment(cursor.getString(4));
-        return employee;
-    }
-         */
+
     }
 
 
