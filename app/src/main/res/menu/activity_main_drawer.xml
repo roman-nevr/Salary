@@ -23,6 +23,13 @@
 
     </group>
 
+    <item
+        android:menuCategory="alternative"
+        android:titleCondensed="@string/app_name"
+        android:title="crm" >
+        <menu></menu>
+    </item>
+
     <item android:title="Misc">
         <menu>
             <item
