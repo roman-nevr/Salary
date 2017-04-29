@@ -3,28 +3,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
               android:layout_width="match_parent"
-              android:layout_height="match_parent"
+              android:layout_height="wrap_content"
               android:paddingTop="@dimen/mainItemMarginSize"
               android:paddingBottom="@dimen/mainItemMarginSize"
-    tools:context=".NavigationScreen">
+    tools:context=".presentation.activity.NavigationScreen">
     <TextView
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
 
             android:textSize="@dimen/tvNameTextSize"
-            android:text="140000"
-            android:id="@+id/tvTotal"
+            tools:text="140000"
+            android:id="@+id/total"
             android:textColor="@color/tvNameColor"
             />
     <TextView
             android:layout_width="0dp"
             android:layout_weight="1"
             android:gravity="right"
-            android:paddingRight="10dp"
+            android:paddingRight="8dp"
             android:layout_height="wrap_content"
-            android:text="1620121651651"
+            tools:text="1620121651651"
             android:textSize="@dimen/tvBalanceTextSize"
-            android:id="@+id/tvDate"
+            android:id="@+id/date"
             />
 </LinearLayout>

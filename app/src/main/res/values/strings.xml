@@ -11,4 +11,6 @@
     <string name="ok_button">Save</string>
     <string name="cancel_button">Cancel</string>
     <string name="error_message">Check input</string>
+    <string name="employees_tab_label">Employees</string>
+    <string name="salary_tab_label">Salaries</string>
 </resources>
