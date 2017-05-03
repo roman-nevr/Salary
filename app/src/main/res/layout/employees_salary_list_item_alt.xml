@@ -42,6 +42,7 @@
         android:layout_height="wrap_content"
         android:textSize="30dp"
         tools:text="15000"
+        android:gravity="right"
         android:id="@+id/salary" />
 
 </LinearLayout>

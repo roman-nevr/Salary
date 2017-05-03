@@ -67,7 +67,12 @@ public class SalaryDetailsFragment extends Fragment implements EditRecordDialogL
 
     private void initUi(View view) {
         btnCalc.setOnClickListener(v -> {
-            presenter.onCalcButtonClick();
+            try{
+                int totalSum = Integer.parseInt(total.getText().toString());
+                presenter.onCalcButtonClick(totalSum);
+            }catch (NumberFormatException e){
+                showError(total);
+            }
         });
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
@@ -75,6 +80,12 @@ public class SalaryDetailsFragment extends Fragment implements EditRecordDialogL
                 layoutManager.getOrientation());
         recyclerView.addItemDecoration(dividerItemDecoration);
         recyclerView.setLayoutManager(layoutManager);
+    }
+
+    private void showError(EditText editText) {
+        editText.requestFocus();
+        editText.setSelection(editText.length());
+        editText.setError(getResources().getText(R.string.error_message));
     }
 
     public void showSalary(Salary salary){
@@ -112,7 +123,7 @@ public class SalaryDetailsFragment extends Fragment implements EditRecordDialogL
         dialog.show(getChildFragmentManager(), "ask");
     }
 
-    @Override public void save(int id, float coef, float days) {
-        presenter.onRecordSave(id, coef, days);
+    @Override public void save(int id, float coef, int dailySalary, float days) {
+        presenter.onRecordSave(id, coef, dailySalary, days);
     }
 }

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -27,6 +28,8 @@ import ru.rubicon.salary.presentation.DetailsRouter;
 import ru.rubicon.salary.presentation.presenter.EmployeeDetailsPresenter;
 import ru.rubicon.salary.utils.Utils;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 import static ru.rubicon.salary.presentation.activity.DetailsActivity.ID;
 
 /**
@@ -37,8 +40,14 @@ public class EmployeeDetailsFragment extends Fragment {
     @BindView(R.id.etName) EditText etName;
     @BindView(R.id.etCoef) EditText etCoef;
     @BindView(R.id.etComment) EditText etComment;
+    @BindView(R.id.fixed_salary) EditText etFixedSalary;
     @BindView(R.id.checkBox) CheckBox cbActive;
+    @BindView(R.id.has_fixed_salary) CheckBox cbHasFixed;
     @BindView(R.id.btnSave) Button btnSave;
+
+    @BindView(R.id.etCoef_layout) TextInputLayout coefLayout;
+    @BindView(R.id.fixed_salary_layout) TextInputLayout fixedLayout;
+
     private int id;
 
     @Inject EmployeeDetailsPresenter presenter;
@@ -70,8 +79,39 @@ public class EmployeeDetailsFragment extends Fragment {
             String coef = etCoef.getText().toString();
             String comment = etComment.getText().toString();
             boolean isActive = cbActive.isChecked();
-            presenter.onSaveClick(name, coef, isActive, comment);
+            boolean hasFixed = cbHasFixed.isChecked();
+            String fixedSalary = etFixedSalary.getText().toString();
+            presenter.onSaveClick(name, coef, isActive, comment, hasFixed, fixedSalary);
         });
+
+        cbHasFixed.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if(isChecked){
+                showFixed();
+                hideCoef();
+            }else {
+                showCoef();
+                hideFixed();
+            }
+        });
+    }
+
+    private void hideCoef(){
+        coefLayout.setEnabled(false);
+    }
+
+    private void hideFixed(){
+        fixedLayout.setEnabled(false);
+//        fixedLayout.setVisibility(GONE);
+//        Utils.animateSize(etFixedSalary, etFixedSalary.getHeight(), 0);
+    }
+
+    private void showCoef(){
+        coefLayout.setEnabled(true);
+    }
+
+    private void showFixed(){
+        fixedLayout.setEnabled(true);
+//        fixedLayout.setVisibility(VISIBLE);
     }
 
     public void showEmployee(Employee employee){
@@ -79,6 +119,11 @@ public class EmployeeDetailsFragment extends Fragment {
         etCoef.setText(String.valueOf(employee.coefficient()));
         etComment.setText(employee.comment());
         cbActive.setChecked(employee.isActive());
+        cbHasFixed.setChecked(employee.hasFixedSalary());
+        etFixedSalary.setText(String.valueOf(employee.dailySalary()));
+        if(!cbHasFixed.isChecked()){
+            hideFixed();
+        }
     }
 
     @Override public void onStart() {
@@ -108,11 +153,19 @@ public class EmployeeDetailsFragment extends Fragment {
     }
 
     public void showCoefError(){
-        etCoef.requestFocus();
-        etCoef.setSelection(etCoef.length());
-        etCoef.setError(getResources().getText(R.string.error_message));
-        throw new RuntimeException();
+        showEditTextError(etCoef);
     }
+
+    public void showFixedError() {
+        showEditTextError(etFixedSalary);
+    }
+
+    private void showEditTextError(EditText editText){
+        editText.requestFocus();
+        editText.setSelection(editText.length());
+        editText.setError(getResources().getText(R.string.error_message));
+    }
+
     private void hideKeyboard() {
         Utils.hideKeyboard(getActivity(), etName);
     }

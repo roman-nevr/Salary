@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Salary</string>
+    <string name="app_name">PayrollApp</string>
     <string-array name="menu_points">
         <item>first</item>
         <item>second</item>
@@ -13,4 +13,12 @@
     <string name="error_message">Check input</string>
     <string name="employees_tab_label">Employees</string>
     <string name="salary_tab_label">Salaries</string>
+
+    <string name="salary_title">Salary Calculation</string>
+    <string name="add_employee">Add new employee</string>
+    <string name="edit_employee">Edit employee</string>
+
+    <string name="delete_label">Delete</string>
+    <string name="total_label">Total</string>
+
 </resources>

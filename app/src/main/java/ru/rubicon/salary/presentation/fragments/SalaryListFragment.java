@@ -3,6 +3,7 @@ package ru.rubicon.salary.presentation.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,7 +12,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -22,11 +26,15 @@ import ru.rubicon.salary.domain.entity.Salary;
 import ru.rubicon.salary.presentation.App;
 import ru.rubicon.salary.presentation.NavigationRouter;
 import ru.rubicon.salary.presentation.adapter.SalaryListAdapter;
+import ru.rubicon.salary.presentation.dialog.DeleteDialog;
+import ru.rubicon.salary.presentation.dialog.DeleteDialog.DeleteDialogListener;
 import ru.rubicon.salary.presentation.presenter.SalaryListPresenter;
 
-public class SalaryListFragment extends Fragment {
+public class SalaryListFragment extends Fragment implements DeleteDialogListener {
 
     private RecyclerView.Adapter adapter;
+
+    private static final String DELETE = "delete";
 
     @Inject SalaryListPresenter presenter;
 
@@ -67,7 +75,17 @@ public class SalaryListFragment extends Fragment {
     }
 
     public void showSalaries(List<Salary> salaries){
-        adapter = new SalaryListAdapter(salaries, presenter);
+        DateFormat format = new SimpleDateFormat("dd MMMM yy", Locale.getDefault());
+        adapter = new SalaryListAdapter(salaries, presenter, format);
         recyclerView.setAdapter(adapter);
+    }
+
+    public void showDeleteDialog(int id) {
+        DialogFragment dialog = DeleteDialog.getInstance(id);
+        dialog.show(getChildFragmentManager(), DELETE);
+    }
+
+    @Override public void onDialogComplete(int id) {
+        presenter.onDeleteConfirmed(id);
     }
 }

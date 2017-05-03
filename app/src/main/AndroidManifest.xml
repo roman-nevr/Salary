@@ -26,11 +26,5 @@
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <activity
-            android:name=".presentation.EmployeeDialogActivity"
-            android:label="Employee"
-            android:theme="@style/Theme.AppCompat.Light.Dialog"
-            >
-        </activity>
     </application>
 </manifest>

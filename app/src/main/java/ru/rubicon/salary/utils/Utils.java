@@ -1,13 +1,18 @@
 package ru.rubicon.salary.utils;
 
 import android.animation.ArgbEvaluator;
+import android.animation.FloatEvaluator;
+import android.animation.IntEvaluator;
 import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class Utils {
@@ -18,10 +23,9 @@ public class Utils {
                 InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
-    public static void animateImageButtonColor(ImageButton button, int colorFrom, int colorTo) {
-        ObjectAnimator animator = ObjectAnimator.ofObject(button,
-                "colorFilter", new ArgbEvaluator(), colorFrom, colorTo);
-
+    public static void animateSize(TextView view, int sizeFrom, int sizeTo) {
+        ObjectAnimator animator = ObjectAnimator.ofObject(view,
+                "height", new IntEvaluator(), sizeFrom, sizeTo);
         animator.setDuration(300);
         animator.start();
     }

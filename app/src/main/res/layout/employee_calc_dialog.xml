@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
      android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.EmployeeDialogActivity"
     android:orientation="vertical"
     android:padding="10dp">
 
@@ -52,8 +51,30 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:id="@+id/llDays"
+        android:id="@+id/llDaily"
         android:layout_below="@+id/llCoef">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Daily salary"
+            android:id="@+id/tvDaily" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+            android:ems="10"
+            android:id="@+id/etDaily"
+            tools:text="600" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/llDays"
+        android:layout_below="@+id/llDaily">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

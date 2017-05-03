@@ -1,150 +1,170 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:padding="10dp"
+    android:focusable="true"
     tools:context=".presentation.activity.NavigationScreen">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Employee details"
-        android:id="@+id/tvTitle"
-        android:textSize="30dp"
-        android:gravity="center"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_below="@+id/tvTitle"
-        android:id="@+id/llName">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Name"
-            android:id="@+id/tvName" />
-
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:id="@+id/textInputLayout"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp">
         <EditText
+            android:id="@+id/etName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:inputType="textPersonName"
             android:ems="10"
             android:hint="Input name"
-            android:id="@+id/etName"
-            android:text="" />
-    </LinearLayout>
+            android:inputType="textPersonName"
+            android:text="fix"
+            />
+    </android.support.design.widget.TextInputLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:id="@+id/llCoef"
-        android:layout_below="@+id/llName">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Coefficient"
-            android:id="@+id/tvCoef" />
-
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:id="@+id/etCoef_layout"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp">
         <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="numberDecimal"
-            android:ems="10"
             android:id="@+id/etCoef"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
             android:hint="Input coefficient"
-            android:text="" />
-    </LinearLayout>
-<!--
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_below="@+id/llCoef"
-        android:id="@+id/llBalance">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Start balance" />
-
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:inputType="numberDecimal"
-            android:ems="10"
-            android:id="@+id/etStartBalance"
-            android:text="" />
-    </LinearLayout> -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:id="@+id/llComment"
-        android:layout_below="@+id/llCoef"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
-        <TextView
-            android:paddingTop="2dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Comment"
-            android:layout_gravity="left" />
+            android:text="fix"
+            />
+    </android.support.design.widget.TextInputLayout>
 
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="textMultiLine"
-            android:lines="2"
-            android:ems="10"
-            android:id="@+id/etComment"
-            android:text="" />
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_below="@id/llComment"
-        android:id="@+id/llCheck">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Still works " />
-
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/checkBox"
-            android:layout_gravity="top"
-            android:scaleX="2"
-            android:scaleY="2"
-            android:checked="false"
-            android:textSize="30dp"/>
-
-    </LinearLayout>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/textView2"
-        android:layout_below="@+id/llCheck"
-        android:layout_centerHorizontal="true" />
+        android:text="Still works "
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/fixed_salary_layout"
+        android:layout_marginLeft="18dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:id="@+id/textView3"
+        android:layout_marginStart="8dp"/>
+
+        <CheckBox
+            android:id="@+id/checkBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:checked="false"
+            android:scaleX="2"
+            android:scaleY="2"
+            android:textSize="30dp"
+            app:layout_constraintLeft_toRightOf="@+id/textView3"
+            app:layout_constraintTop_toTopOf="@+id/textView3"
+            />
 
     <Button
+        android:id="@+id/btnSave"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Save"
-        android:id="@+id/btnSave"
-        android:layout_below="@+id/llCheck"
-        android:layout_alignLeft="@+id/textView2"
-        android:layout_alignStart="@+id/textView2"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
 
-</RelativeLayout>
+        android:text="Save"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/fixed_salary_layout"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginEnd="8dp"/>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/etCoef_layout"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:id="@+id/textInputLayout3"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp">
+
+        <EditText
+            android:id="@+id/etComment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Input comment"
+            android:inputType="textMultiLine"
+            android:lines="2"
+            android:text=""
+            tools:layout_editor_absoluteX="163dp"
+            tools:layout_editor_absoluteY="278dp"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Has fixed salary "
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/textView3"
+        android:layout_marginLeft="18dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:id="@+id/textView4"
+        android:layout_marginStart="8dp"/>
+
+    <CheckBox
+        android:id="@+id/has_fixed_salary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:checked="false"
+        android:scaleX="2"
+        android:scaleY="2"
+        android:textSize="30dp"
+        app:layout_constraintLeft_toRightOf="@+id/textView4"
+        app:layout_constraintTop_toTopOf="@+id/textView4"
+        />
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:id="@+id/fixed_salary_layout"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout3">
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:text="fix"
+            android:hint="Input fixed salary"
+            android:id="@+id/fixed_salary"
+            />
+
+    </android.support.design.widget.TextInputLayout>
+
+</android.support.constraint.ConstraintLayout>

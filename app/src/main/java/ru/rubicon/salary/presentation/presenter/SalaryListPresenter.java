@@ -42,4 +42,13 @@ public class SalaryListPresenter implements OnItemClickListener{
     @Override public void onItemClick(int id) {
         navigationRouter.editSalary(id);
     }
+
+    public void onItemLongClick(int id) {
+        view.showDeleteDialog(id);
+    }
+
+    public void onDeleteConfirmed(int id) {
+        repository.deleteSalary(id);
+        start();
+    }
 }

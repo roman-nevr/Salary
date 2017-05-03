@@ -18,7 +18,7 @@ import ru.rubicon.salary.domain.entity.SalaryTableRecord;
  */
 public class DatabaseHelper extends SQLiteOpenHelper implements BaseColumns {
 
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 5;
     private static final String DATABASE_NAME = "salary.db";
 
     static final String EMPLOYEES_TABLE = "employees";
@@ -38,6 +38,7 @@ public class DatabaseHelper extends SQLiteOpenHelper implements BaseColumns {
     static final String RECORDS_SALARY_ID = "salary_id";
     static final String RECORDS_EMPLOYEE = "employee_name";
     static final String RECORDS_COEF = "employee_coef";
+    static final String RECORDS_DAILY_SALARY = "daily_salary";
     static final String RECORDS_DAYS = "days";
     static final String RECORDS_SALARY = "salary_sum";
 
@@ -66,6 +67,7 @@ public class DatabaseHelper extends SQLiteOpenHelper implements BaseColumns {
                 RECORDS_SALARY_ID + " integer not null, " +
                 RECORDS_EMPLOYEE + " text not null, " +
                 RECORDS_COEF + " real not null, " +
+                RECORDS_DAILY_SALARY + " integer not null, " +
                 RECORDS_DAYS + " real not null, " +
                 RECORDS_SALARY + " integer not null);";
         db.execSQL(script_employee);
@@ -115,10 +117,11 @@ public class DatabaseHelper extends SQLiteOpenHelper implements BaseColumns {
             employees.add(createEmployee(1, "Leha", 1.5f));
             employees.add(createEmployee(2, "Shurik", 2.5f));
             employees.add(createEmployee(3, "Ivan", 2.5f));
-            employees.add(createEmployee(4, "Roman", 2.5f));
+            employees.add(createEmployee(4, "Denis", 2.5f));
             employees.add(createEmployee(5, "Evgenia", 2.5f));
-            employees.add(createEmployee(6, "Shurik", 2.5f));
-            employees.add(createEmployee(7, "Shurik", 2.5f));
+            employees.add(createEmployee(6, "Roman", 2.5f, false));
+            employees.add(createEmployee(7, "Sasha", 600));
+            employees.add(createEmployee(8, "Slava", 600));
         }
 
         public static void fillEmployeeDataBase(SQLiteDatabase db) {
@@ -181,6 +184,7 @@ public class DatabaseHelper extends SQLiteOpenHelper implements BaseColumns {
             values.put(RECORDS_SALARY_ID, record.salaryId());
             values.put(RECORDS_EMPLOYEE, record.employee());
             values.put(RECORDS_COEF, record.coefficient());
+            values.put(RECORDS_DAILY_SALARY, record.dailySalary());
             values.put(RECORDS_DAYS, record.amountsOfDays());
             values.put(RECORDS_SALARY, record.salary());
 
@@ -189,6 +193,14 @@ public class DatabaseHelper extends SQLiteOpenHelper implements BaseColumns {
 
         private static Employee createEmployee(int id, String name, float coef){
             return Employee.create(id, name, coef, true, false, 0, "");
+        }
+
+        private static Employee createEmployee(int id, String name, float coef, boolean isActive) {
+            return Employee.create(id, name, coef, isActive, false, 0, "");
+        }
+
+        private static Employee createEmployee(int id, String name, int dailySalary){
+            return Employee.create(id, name, 0f, true, true, dailySalary, "");
         }
 
         private static Salary createSalary(){
@@ -205,7 +217,7 @@ public class DatabaseHelper extends SQLiteOpenHelper implements BaseColumns {
             List<SalaryTableRecord> records = new ArrayList<>();
             int id = 0;
             for (Employee employee : employees) {
-                records.add(SalaryTableRecord.create(id++, salaryId, employee.name(), employee.coefficient(), 20, 10000));
+                records.add(SalaryTableRecord.create(id++, salaryId, employee.name(), employee.coefficient(), employee.dailySalary(), 20, 10000));
             }
             return records;
         }

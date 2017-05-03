@@ -38,8 +38,9 @@ public class SalaryDetailsPresenter implements OnItemClickListener{
 
     private Salary createNewSalary() {
         List<SalaryTableRecord> records = createRecords();
-        return Salary.create(-1, System.currentTimeMillis(), 0, records, "");
-//        return null;
+        Salary salary = Salary.create(-1, System.currentTimeMillis(), 0, records, "");
+        int id = salaryRepository.saveSalary(salary);
+        return salaryRepository.getSalary(id);
     }
 
     private List<SalaryTableRecord> createRecords() {
@@ -47,7 +48,7 @@ public class SalaryDetailsPresenter implements OnItemClickListener{
         List<SalaryTableRecord> records = new ArrayList<>();
         for (Employee employee : allEmployees) {
             if (employee.isActive()){
-                records.add(SalaryTableRecord.create(-1, -1, employee.name(), employee.coefficient(), 20f, 0));
+                records.add(SalaryTableRecord.create(-1, -1, employee.name(), employee.coefficient(), employee.dailySalary(), 20f, 0));
             }
         }
         return records;
@@ -67,18 +68,19 @@ public class SalaryDetailsPresenter implements OnItemClickListener{
         view.showTableRecord(record);
     }
 
-    public void onCalcButtonClick() {
-        salary = Calculator.calculateSalaries(salary);
+    public void onCalcButtonClick(int totalSum) {
+        salary = Calculator.calculateSalaries(salary.toBuilder().total(totalSum).build());
         salaryRepository.saveSalary(salary);
         view.showSalary(salary);
     }
 
-    public void onRecordSave(int id, float coef, float days) {
+    public void onRecordSave(int id, float coef, int dailySalary, float days) {
         List<SalaryTableRecord> records = salary.salaryTableRecords();
         for (int index = 0; index < records.size(); index++) {
             if(id == records.get(index).id()){
                 SalaryTableRecord record = records.get(index).toBuilder()
                         .coefficient(coef)
+                        .dailySalary(dailySalary)
                         .amountsOfDays(days)
                         .build();
                 records.set(index, record);

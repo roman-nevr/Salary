@@ -18,6 +18,7 @@ import static ru.rubicon.salary.data.sqlite.DatabaseHelper.CASH_COMMENT;
 import static ru.rubicon.salary.data.sqlite.DatabaseHelper.CASH_DATE;
 import static ru.rubicon.salary.data.sqlite.DatabaseHelper.CASH_TOTAL;
 import static ru.rubicon.salary.data.sqlite.DatabaseHelper.RECORDS_COEF;
+import static ru.rubicon.salary.data.sqlite.DatabaseHelper.RECORDS_DAILY_SALARY;
 import static ru.rubicon.salary.data.sqlite.DatabaseHelper.RECORDS_DAYS;
 import static ru.rubicon.salary.data.sqlite.DatabaseHelper.RECORDS_EMPLOYEE;
 import static ru.rubicon.salary.data.sqlite.DatabaseHelper.RECORDS_SALARY;
@@ -35,7 +36,7 @@ public class SalaryDataRepositoryImpl implements SalaryDataRepository, BaseColum
         contentValues = new ContentValues();
     }
 
-    @Override public void saveSalary(Salary salary) {
+    @Override public int saveSalary(Salary salary) {
         long id;
         if(salary.id() < 0){
             fillContentValues(salary);
@@ -47,6 +48,7 @@ public class SalaryDataRepositoryImpl implements SalaryDataRepository, BaseColum
         for (SalaryTableRecord record : salary.salaryTableRecords()) {
             saveSalaryTableRecord(record.toBuilder().salaryId((int)id).build());
         }
+        return (int)id;
     }
 
     @Override public Salary getSalary(int id) {
@@ -104,17 +106,28 @@ public class SalaryDataRepositoryImpl implements SalaryDataRepository, BaseColum
         return record;
     }
 
+    @Override public void deleteSalary(int id) {
+        String selection = String.format("%1s = ?", _ID);
+        String[] selectionArgs = {String.valueOf(id)};
+        database.delete(SALARIES_TABLE, selection, selectionArgs);
+
+        selection = String.format("%1s = ?", RECORDS_SALARY_ID);
+        database.delete(RECORDS_TABLE, selection, selectionArgs);
+    }
+
     private SalaryTableRecord getSalaryTableRecordFromCursor(Cursor cursor) {
         int idIndex = cursor.getColumnIndex(_ID);
         int salaryIdIndex = cursor.getColumnIndex(RECORDS_SALARY_ID);
         int employeeIndex = cursor.getColumnIndex(RECORDS_EMPLOYEE);
         int coefIndex = cursor.getColumnIndex(RECORDS_COEF);
+        int dailyIndex = cursor.getColumnIndex(RECORDS_DAILY_SALARY);
         int daysIndex = cursor.getColumnIndex(RECORDS_DAYS);
         int salaryIndex = cursor.getColumnIndex(RECORDS_SALARY);
         return SalaryTableRecord.create(cursor.getInt(idIndex),
                 cursor.getInt(salaryIdIndex),
                 cursor.getString(employeeIndex),
                 cursor.getFloat(coefIndex),
+                cursor.getInt(dailyIndex),
                 cursor.getFloat(daysIndex),
                 cursor.getInt(salaryIndex));
     }
@@ -137,6 +150,7 @@ public class SalaryDataRepositoryImpl implements SalaryDataRepository, BaseColum
         contentValues.put(RECORDS_SALARY_ID, record.salaryId());
         contentValues.put(RECORDS_EMPLOYEE, record.employee());
         contentValues.put(RECORDS_COEF, record.coefficient());
+        contentValues.put(RECORDS_DAILY_SALARY, record.dailySalary());
         contentValues.put(RECORDS_DAYS, record.amountsOfDays());
         contentValues.put(RECORDS_SALARY, record.salary());
     }

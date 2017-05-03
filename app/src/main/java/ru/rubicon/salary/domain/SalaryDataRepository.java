@@ -7,7 +7,7 @@ import ru.rubicon.salary.domain.entity.SalaryTableRecord;
 
 public interface SalaryDataRepository {
 
-    void saveSalary(Salary salary);
+    int saveSalary(Salary salary);
 
     Salary getSalary(int id);
 
@@ -16,4 +16,6 @@ public interface SalaryDataRepository {
     void saveSalaryTableRecord(SalaryTableRecord record);
 
     SalaryTableRecord getSalaryTableRecord(int id);
+
+    void deleteSalary(int id);
 }

@@ -49,7 +49,8 @@ public class EmployeeRepositoryImpl implements EmployeeRepository, BaseColumns{
 
     @Override public List<Employee> getAllEmployees() {
         List<Employee> employees = new ArrayList<>();
-        Cursor cursor = database.query(EMPLOYEES_TABLE, null, null, null, null, null, null, null);
+        String order = EMPLOYEE_IS_ACTIVE + " DESC";
+        Cursor cursor = database.query(EMPLOYEES_TABLE, null, null, null, null, null, order, null);
         while (cursor.moveToNext()) {
             employees.add(getEmployeeFromCursor(cursor));
         }

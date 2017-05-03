@@ -5,6 +5,7 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorNormal">#000000</color>
+    <color name="colorText">#212121</color>
     <color name="colorTransparent">#00ffffff</color>
 
     <color name="trans_black_second">#00717171</color>

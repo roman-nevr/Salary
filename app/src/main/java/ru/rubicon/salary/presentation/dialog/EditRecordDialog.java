@@ -8,6 +8,7 @@ import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import butterknife.BindView;
@@ -17,12 +18,15 @@ import ru.rubicon.salary.R;
 import ru.rubicon.salary.domain.entity.Employee;
 import ru.rubicon.salary.domain.entity.SalaryTableRecord;
 
+import static android.view.View.GONE;
+
 
 public class EditRecordDialog extends DialogFragment {
 
     public static final String COEF = "coef";
     public static final String DAYS = "days";
     public static final String NAME = "name";
+    public static final String DAILY = "daily";
     private EditRecordDialogListener listener;
     private int id;
 
@@ -31,10 +35,16 @@ public class EditRecordDialog extends DialogFragment {
     @BindView(R.id.tvName) TextView tvName;
     @BindView(R.id.etCoef) EditText etCoef;
     @BindView(R.id.etDays) EditText etDays;
+    @BindView(R.id.etDaily) EditText etDaily;
     @BindView(R.id.btnSave) Button btnSave;
+
+    @BindView(R.id.llDaily) LinearLayout llDaily;
+    @BindView(R.id.llCoef) LinearLayout llCoef;
+
     private float days;
     private float coef;
     private String name;
+    private int daily;
 
     @Override public void onAttach(Context context) {
         super.onAttach(context);
@@ -70,8 +80,9 @@ public class EditRecordDialog extends DialogFragment {
             throw new IllegalArgumentException("id must be defined");
         }
         name = bundle.getString(NAME);
-        coef = bundle.getFloat(COEF, 0);
-        days = bundle.getFloat(DAYS, 0);
+        coef = bundle.getFloat(COEF);
+        days = bundle.getFloat(DAYS);
+        daily = bundle.getInt(DAILY);
     }
 
     private View createUIView(){
@@ -81,18 +92,35 @@ public class EditRecordDialog extends DialogFragment {
 
         tvName.setText(name);
         etCoef.setText(String.valueOf(coef));
+        etDaily.setText(String.valueOf(daily));
         etDays.setText(String.valueOf(days));
+        if (coef == 0f){
+            llCoef.setVisibility(GONE);
+        }else {
+            llDaily.setVisibility(GONE);
+        }
 
         btnSave.setOnClickListener(v -> {
             float readCoef = readFloatFrom(etCoef);
             float readDays = readFloatFrom(etDays);
-            if(readCoef != -1 && readDays != -1){
-                listener.save(id, readCoef, readDays);
+            int readDailySaalry = readIntFrom(etDaily);
+            if(!(readCoef == -1 || readDays == -1)){
+                listener.save(id, readCoef, readDailySaalry, readDays);
                 dismiss();
             }
         });
 
         return form;
+    }
+
+    private int readIntFrom(EditText editText) {
+        try {
+            return Integer.parseInt(editText.getText().toString());
+        }catch (NumberFormatException e){
+            showError(editText);
+            return -1;
+//            throw new IllegalArgumentException(e);
+        }
     }
 
     private float readFloatFrom(EditText editText) {
@@ -116,12 +144,13 @@ public class EditRecordDialog extends DialogFragment {
         bundle.putInt(ID, record.id());
         bundle.putString(NAME, record.employee());
         bundle.putFloat(COEF, record.coefficient());
+        bundle.putInt(DAILY, record.dailySalary());
         bundle.putFloat(DAYS, record.amountsOfDays());
         fragment.setArguments(bundle);
         return fragment;
     }
 
     public interface EditRecordDialogListener{
-        void save(int id, float coef, float days);
+        void save(int id, float coef, int dailySalary, float days);
     }
 }

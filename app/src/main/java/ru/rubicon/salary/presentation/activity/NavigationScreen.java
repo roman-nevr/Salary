@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -17,6 +18,7 @@ public class NavigationScreen extends AppCompatActivity implements NavigationRou
 
     @BindView(R.id.tabs) TabLayout tabLayout;
     @BindView(R.id.view_pager) ViewPager viewPager;
+    @BindView(R.id.toolbar) Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +32,7 @@ public class NavigationScreen extends AppCompatActivity implements NavigationRou
     private void initUi() {
         viewPager.setAdapter(new NavigationPagerAdapter(getSupportFragmentManager(), getApplicationContext()));
         tabLayout.setupWithViewPager(viewPager);
+        toolbar.setTitle(R.string.app_name);
     }
 
     public static void startActivity(Context context){

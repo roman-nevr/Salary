@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import ru.rubicon.salary.R;
 import ru.rubicon.salary.presentation.DetailsRouter;
 import ru.rubicon.salary.presentation.fragments.EmployeeDetailsFragment;
@@ -47,6 +48,7 @@ public class DetailsActivity extends AppCompatActivity implements DetailsRouter{
 
     private void initUi() {
         setContentView(R.layout.details_layout);
+        ButterKnife.bind(this);
     }
 
     private void showFragment(int type){
@@ -70,12 +72,16 @@ public class DetailsActivity extends AppCompatActivity implements DetailsRouter{
     @NonNull private Fragment getFragment(int type) {
         switch (type){
             case R.id.add_employee:
+                toolbar.setTitle(R.string.add_employee);
                 return EmployeeDetailsFragment.getInstance();
             case R.id.add_salary:
+                toolbar.setTitle(R.string.salary_title);
                 return SalaryDetailsFragment.getInstance();
             case R.id.edit_employee:
+                toolbar.setTitle(R.string.edit_employee);
                 return EmployeeDetailsFragment.getInstance(id);
             case R.id.edit_salary:
+                toolbar.setTitle(R.string.salary_title);
                 return SalaryDetailsFragment.getInstance(id);
             default:
                 throw new IllegalArgumentException();

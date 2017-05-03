@@ -29,20 +29,42 @@ public class EmployeeDetailsPresenter {
         view.showEmployee(employee);
     }
 
-    public void onSaveClick(String name, String stringCoef, boolean isActive, String comment) {
+    public void onSaveClick(String name, String rawCoef, boolean isActive, String comment, boolean hasFixed, String rawFixedSalary) {
         // TODO: 03.05.17 make fixed salary
         try {
-            float coef = Float.valueOf(stringCoef);
+
+            float coef = parseCoef(rawCoef);
+            int fixedSalary = parseFixedSalary(rawFixedSalary);
             employee = employee.toBuilder()
                     .name(name)
                     .coefficient(coef)
                     .isActive(isActive)
+                    .hasFixedSalary(hasFixed)
+                    .dailySalary(fixedSalary)
                     .comment(comment)
                     .build();
             repository.saveEmployee(employee);
             router.close();
-        } catch (NumberFormatException e) {
+        } catch (IllegalArgumentException e) {
             view.showCoefError();
+        }
+    }
+
+    private float parseCoef(String coef) throws IllegalArgumentException{
+        try {
+            return Float.valueOf(coef);
+        }catch (NumberFormatException e){
+            view.showCoefError();
+            throw new IllegalArgumentException(e);
+        }
+    }
+
+    private int parseFixedSalary(String coef) throws IllegalArgumentException{
+        try {
+            return Integer.valueOf(coef);
+        }catch (NumberFormatException e){
+            view.showFixedError();
+            throw new IllegalArgumentException(e);
         }
     }
 

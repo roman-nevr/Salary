@@ -17,9 +17,12 @@ public abstract class SalaryTableRecord{
 
     abstract public float coefficient();
 
+    abstract public int dailySalary();
+
     abstract public float amountsOfDays();
 
     abstract public int salary();
+
 
     public static Builder builder() {
         return new AutoValue_SalaryTableRecord.Builder();
@@ -27,12 +30,13 @@ public abstract class SalaryTableRecord{
 
     public abstract Builder toBuilder();
 
-    public static SalaryTableRecord create(int id, int salaryId, String employee, float coefficient, float amountsOfDays, int salary) {
+    public static SalaryTableRecord create(int id, int salaryId, String employee, float coefficient, int dailySalary, float amountsOfDays, int salary) {
         return builder()
                 .id(id)
                 .salaryId(salaryId)
                 .employee(employee)
                 .coefficient(coefficient)
+                .dailySalary(dailySalary)
                 .amountsOfDays(amountsOfDays)
                 .salary(salary)
                 .build();
@@ -55,6 +59,8 @@ public abstract class SalaryTableRecord{
         public abstract Builder amountsOfDays(float amountsOfDays);
 
         public abstract Builder salary(int salary);
+
+        public abstract Builder dailySalary(int dailySalary);
 
         public abstract SalaryTableRecord build();
     }
