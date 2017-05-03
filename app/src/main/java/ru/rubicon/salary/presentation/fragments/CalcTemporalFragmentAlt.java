@@ -23,7 +23,7 @@ import ru.rubicon.salary.R;
 import ru.rubicon.salary.presentation.adapter.EmployeeItemListAdapterAlt;
 import ru.rubicon.salary.data.entity.Employee;
 import ru.rubicon.salary.data.entity.Salary;
-import ru.rubicon.salary.utils.utils;
+import ru.rubicon.salary.utils.Utils;
 
 /**
  * Created by admin on 21.07.2016.
@@ -170,7 +170,7 @@ public class CalcTemporalFragmentAlt extends Fragment implements EmployeeItemLis
                 action.execute();
                 action.setCommand(new Update());
             }catch (NumberFormatException e){
-                utils.toastShort(getContext(), "Input error");
+                Utils.toastShort(getContext(), "Input error");
             }
         }
     }

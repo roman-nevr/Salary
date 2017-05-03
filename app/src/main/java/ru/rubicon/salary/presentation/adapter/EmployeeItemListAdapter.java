@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import ru.rubicon.salary.R;
 import ru.rubicon.salary.data.entity.Salary;
-import ru.rubicon.salary.utils.utils;
+import ru.rubicon.salary.utils.Utils;
 
 /**
  * Created by roma on 22.06.2016.
@@ -72,7 +72,7 @@ public class EmployeeItemListAdapter extends BaseAdapter {
             holder = new ViewHolder();
             view = lInflater.inflate(R.layout.employees_salary_list_item, viewGroup, false);
             holder.tvName = (TextView) view.findViewById(R.id.tvName);
-            holder.tvSum = (TextView) view.findViewById(R.id.tvSum);
+            holder.tvSum = (TextView) view.findViewById(R.id.salary);
             holder.etCoef = (EditText) view.findViewById(R.id.etCoef);
             holder.etDays = (EditText) view.findViewById(R.id.etDays);
             view.setTag(holder);
@@ -134,7 +134,7 @@ public class EmployeeItemListAdapter extends BaseAdapter {
                 value = Float.parseFloat(s.toString());
                 mCallback.onCoefTextChanged(id, value);
             }catch (NumberFormatException e){
-                utils.toastShort(context, "Input error");
+                Utils.toastShort(context, "Input error");
             }
 
         }
@@ -164,7 +164,7 @@ public class EmployeeItemListAdapter extends BaseAdapter {
                 float value = Float.parseFloat(s.toString());
                 mCallback.onDaysTextChanged(id, value);
             }catch (NumberFormatException e){
-                utils.toastShort(context, "Input error");
+                Utils.toastShort(context, "Input error");
             }
         }
     }

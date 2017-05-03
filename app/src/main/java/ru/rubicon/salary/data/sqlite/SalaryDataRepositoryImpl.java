@@ -6,7 +6,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,63 +16,136 @@ import ru.rubicon.salary.domain.entity.SalaryTableRecord;
 
 import static ru.rubicon.salary.data.sqlite.DatabaseHelper.CASH_COMMENT;
 import static ru.rubicon.salary.data.sqlite.DatabaseHelper.CASH_DATE;
-import static ru.rubicon.salary.data.sqlite.DatabaseHelper.CASH_TABLE_RECORDS;
 import static ru.rubicon.salary.data.sqlite.DatabaseHelper.CASH_TOTAL;
+import static ru.rubicon.salary.data.sqlite.DatabaseHelper.RECORDS_COEF;
+import static ru.rubicon.salary.data.sqlite.DatabaseHelper.RECORDS_DAYS;
+import static ru.rubicon.salary.data.sqlite.DatabaseHelper.RECORDS_EMPLOYEE;
+import static ru.rubicon.salary.data.sqlite.DatabaseHelper.RECORDS_SALARY;
+import static ru.rubicon.salary.data.sqlite.DatabaseHelper.RECORDS_SALARY_ID;
+import static ru.rubicon.salary.data.sqlite.DatabaseHelper.RECORDS_TABLE;
 import static ru.rubicon.salary.data.sqlite.DatabaseHelper.SALARIES_TABLE;
 
 public class SalaryDataRepositoryImpl implements SalaryDataRepository, BaseColumns {
 
-    private final Gson gson;
     private SQLiteDatabase database;
     private ContentValues contentValues;
 
-    public SalaryDataRepositoryImpl(DatabaseHelper databaseHelper, Gson gson) {
+    public SalaryDataRepositoryImpl(DatabaseHelper databaseHelper) {
         database = databaseHelper.getWritableDatabase();
         contentValues = new ContentValues();
-        this.gson = gson;
     }
 
     @Override public void saveSalary(Salary salary) {
-        fillContentValues(salary);
-        database.insertWithOnConflict(SALARIES_TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+        long id;
+        if(salary.id() < 0){
+            fillContentValues(salary);
+            id = database.insert(SALARIES_TABLE, null, contentValues);
+        }else {
+            fillContentValues(salary);
+            id = database.insertWithOnConflict(SALARIES_TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+        }
+        for (SalaryTableRecord record : salary.salaryTableRecords()) {
+            saveSalaryTableRecord(record.toBuilder().salaryId((int)id).build());
+        }
     }
 
     @Override public Salary getSalary(int id) {
         String selection = _ID + " = ?";
         String[] selectionArgs = {"" + id};
         Cursor cursor = database.query(SALARIES_TABLE, null, selection, selectionArgs, null, null, null, null);
+        Salary salary = null;
         if(cursor.moveToNext()){
-            return getSalaryFromCursor(cursor);
-        }else {
-            return null;
+            List<SalaryTableRecord> records = getSalaryTableRecords(cursor.getInt(cursor.getColumnIndex(_ID)));
+            salary = getSalaryFromCursor(cursor, records);
         }
+        cursor.close();
+        return salary;
     }
 
     @Override public List<Salary> getAllSalaries() {
+
         List<Salary> salaries = new ArrayList<>();
         Cursor cursor = database.query(SALARIES_TABLE, null, null, null, null, null, null, null);
         while (cursor.moveToNext()){
-            salaries.add(getSalaryFromCursor(cursor));
+            List<SalaryTableRecord> records = getSalaryTableRecords(cursor.getInt(cursor.getColumnIndex(_ID)));
+
+            salaries.add(getSalaryFromCursor(cursor, records));
         }
+        cursor.close();
         return salaries;
+    }
+
+    private List<SalaryTableRecord> getSalaryTableRecords(int id) {
+        List<SalaryTableRecord> records = new ArrayList<>();
+        String selection = RECORDS_SALARY_ID + " = ?";
+        String[] selectionArgs = {"" + id};
+        Cursor cursor = database.query(RECORDS_TABLE, null, selection, selectionArgs, null, null, null, null);
+        while (cursor.moveToNext()){
+             records.add(getSalaryTableRecordFromCursor(cursor));
+        }
+        cursor.close();
+        return records;
+    }
+
+    @Override public void saveSalaryTableRecord(SalaryTableRecord record) {
+        fillContentValues(record);
+        database.insertWithOnConflict(RECORDS_TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+    }
+
+    @Override public SalaryTableRecord getSalaryTableRecord(int id) {
+        String selection = _ID + " = ?";
+        String[] selectionArgs = {"" + id};
+        Cursor cursor = database.query(RECORDS_TABLE, null, selection, selectionArgs, null, null, null, null);
+        SalaryTableRecord record = null;
+        if(cursor.moveToNext()){
+            record = getSalaryTableRecordFromCursor(cursor);
+        }
+        cursor.close();
+        return record;
+    }
+
+    private SalaryTableRecord getSalaryTableRecordFromCursor(Cursor cursor) {
+        int idIndex = cursor.getColumnIndex(_ID);
+        int salaryIdIndex = cursor.getColumnIndex(RECORDS_SALARY_ID);
+        int employeeIndex = cursor.getColumnIndex(RECORDS_EMPLOYEE);
+        int coefIndex = cursor.getColumnIndex(RECORDS_COEF);
+        int daysIndex = cursor.getColumnIndex(RECORDS_DAYS);
+        int salaryIndex = cursor.getColumnIndex(RECORDS_SALARY);
+        return SalaryTableRecord.create(cursor.getInt(idIndex),
+                cursor.getInt(salaryIdIndex),
+                cursor.getString(employeeIndex),
+                cursor.getFloat(coefIndex),
+                cursor.getFloat(daysIndex),
+                cursor.getInt(salaryIndex));
     }
 
     private void fillContentValues(Salary salary){
         contentValues.clear();
-        contentValues.put(_ID, salary.id());
+        if(salary.id() >= 0){
+            contentValues.put(_ID, salary.id());
+        }
         contentValues.put(CASH_DATE, salary.date());
         contentValues.put(CASH_TOTAL, salary.total());
-        contentValues.put(CASH_TABLE_RECORDS, gson.toJson(salary.salaryTableRecords()));
         contentValues.put(CASH_COMMENT, salary.comment());
     }
 
-    private Salary getSalaryFromCursor(Cursor cursor) {
+    private void fillContentValues(SalaryTableRecord record){
+        contentValues.clear();
+        if (record.id() >= 0){
+            contentValues.put(_ID, record.id());
+        }
+        contentValues.put(RECORDS_SALARY_ID, record.salaryId());
+        contentValues.put(RECORDS_EMPLOYEE, record.employee());
+        contentValues.put(RECORDS_COEF, record.coefficient());
+        contentValues.put(RECORDS_DAYS, record.amountsOfDays());
+        contentValues.put(RECORDS_SALARY, record.salary());
+    }
+
+    private Salary getSalaryFromCursor(Cursor cursor, List<SalaryTableRecord> records) {
         int idIndex = cursor.getColumnIndex(_ID);
         int dateIndex = cursor.getColumnIndex(CASH_DATE);
         int totalIndex = cursor.getColumnIndex(CASH_TOTAL);
-        int recordsIndex = cursor.getColumnIndex(CASH_TABLE_RECORDS);
         int commentIndex = cursor.getColumnIndex(CASH_COMMENT);
-        List<SalaryTableRecord> records = gson.fromJson(cursor.getString(recordsIndex), new TypeToken<List<SalaryTableRecord>>(){}.getType());
         return Salary.create(cursor.getInt(idIndex),
                 cursor.getLong(dateIndex),
                 cursor.getInt(totalIndex),

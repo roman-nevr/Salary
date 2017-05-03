@@ -67,7 +67,7 @@ public class EmployeeItemListAdapterAlt extends BaseAdapter {
         if (true){
             view = lInflater.inflate(R.layout.employees_salary_list_item_alt, viewGroup, false);
             tvName = (TextView) view.findViewById(R.id.tvName);
-            tvSum = (TextView) view.findViewById(R.id.tvSum);
+            tvSum = (TextView) view.findViewById(R.id.salary);
             tvCoef = (TextView) view.findViewById(R.id.tvCoef);
             tvDays = (TextView) view.findViewById(R.id.tvDays);
 

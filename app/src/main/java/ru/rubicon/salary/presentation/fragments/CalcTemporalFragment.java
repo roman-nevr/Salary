@@ -20,7 +20,7 @@ import ru.rubicon.salary.R;
 import ru.rubicon.salary.presentation.adapter.EmployeeItemListAdapter;
 import ru.rubicon.salary.data.entity.Employee;
 import ru.rubicon.salary.data.entity.Salary;
-import ru.rubicon.salary.utils.utils;
+import ru.rubicon.salary.utils.Utils;
 
 /**
  * Created by roma on 22.06.2016.
@@ -112,7 +112,7 @@ public class CalcTemporalFragment extends Fragment implements EmployeeItemListAd
                     salary.calculateSalary();
                     adapter.notifyDataSetChanged();
                 }catch (NumberFormatException e){
-                    utils.toastShort(getContext(), "Input error");
+                    Utils.toastShort(getContext(), "Input error");
                 }
             }
         });

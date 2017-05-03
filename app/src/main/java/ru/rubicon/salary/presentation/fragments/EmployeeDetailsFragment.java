@@ -23,7 +23,9 @@ import butterknife.ButterKnife;
 import ru.rubicon.salary.R;
 import ru.rubicon.salary.domain.entity.Employee;
 import ru.rubicon.salary.presentation.App;
+import ru.rubicon.salary.presentation.DetailsRouter;
 import ru.rubicon.salary.presentation.presenter.EmployeeDetailsPresenter;
+import ru.rubicon.salary.utils.Utils;
 
 import static ru.rubicon.salary.presentation.activity.DetailsActivity.ID;
 
@@ -57,13 +59,18 @@ public class EmployeeDetailsFragment extends Fragment {
         App.getInstance().getMainComponent().plusEmployeeComponent().inject(this);
         presenter.setView(this);
         presenter.setId(id);
+        presenter.setRouter((DetailsRouter) getActivity());
     }
 
     private void initUi(View view){
         ButterKnife.bind(this, view);
 
         btnSave.setOnClickListener(v -> {
-           //todo
+            String name = etName.getText().toString();
+            String coef = etCoef.getText().toString();
+            String comment = etComment.getText().toString();
+            boolean isActive = cbActive.isChecked();
+            presenter.onSaveClick(name, coef, isActive, comment);
         });
     }
 
@@ -71,8 +78,12 @@ public class EmployeeDetailsFragment extends Fragment {
         etName.setText(employee.name());
         etCoef.setText(String.valueOf(employee.coefficient()));
         etComment.setText(employee.comment());
-        cbActive.setActivated(employee.isActive());
+        cbActive.setChecked(employee.isActive());
+    }
 
+    @Override public void onStart() {
+        super.onStart();
+        presenter.start();
     }
 
     @Override public void onStop() {
@@ -96,15 +107,13 @@ public class EmployeeDetailsFragment extends Fragment {
         id = getArguments().getInt(ID, -1);
     }
 
-    private void showError(EditText editText){
-        editText.requestFocus();
-        editText.setSelection(editText.length());
-        editText.setError(getResources().getText(R.string.error_message));
+    public void showCoefError(){
+        etCoef.requestFocus();
+        etCoef.setSelection(etCoef.length());
+        etCoef.setError(getResources().getText(R.string.error_message));
         throw new RuntimeException();
     }
     private void hideKeyboard() {
-        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        //imm.hideSoftInputFromWindow(getActivity()., 0);
-        imm.toggleSoftInput(0,0);
+        Utils.hideKeyboard(getActivity(), etName);
     }
 }

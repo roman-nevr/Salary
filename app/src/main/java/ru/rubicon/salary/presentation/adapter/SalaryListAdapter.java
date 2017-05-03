@@ -12,16 +12,19 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ru.rubicon.salary.R;
 import ru.rubicon.salary.domain.entity.Salary;
+import ru.rubicon.salary.presentation.OnItemClickListener;
 
 /**
  * Created by roma on 22.06.2016.
  */
-public class SalariesAdapter extends RecyclerView.Adapter<SalariesAdapter.SalaryViewHolder> {
+public class SalaryListAdapter extends RecyclerView.Adapter<SalaryListAdapter.SalaryViewHolder> {
 
     private List<Salary> salaries;
+    private OnItemClickListener listener;
 
-    public SalariesAdapter(List<Salary> salaries) {
+    public SalaryListAdapter(List<Salary> salaries, OnItemClickListener listener) {
         this.salaries = salaries;
+        this.listener = listener;
         hasStableIds();
     }
 
@@ -47,7 +50,7 @@ public class SalariesAdapter extends RecyclerView.Adapter<SalariesAdapter.Salary
     }
 
 
-    public static class SalaryViewHolder extends RecyclerView.ViewHolder{
+    class SalaryViewHolder extends RecyclerView.ViewHolder{
 
         @BindView(R.id.total) TextView total;
         @BindView(R.id.date) TextView date;
@@ -55,6 +58,12 @@ public class SalariesAdapter extends RecyclerView.Adapter<SalariesAdapter.Salary
         public SalaryViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(v -> {
+                int adapterPosition = getAdapterPosition();
+                if(adapterPosition != RecyclerView.NO_POSITION){
+                    listener.onItemClick(salaries.get(adapterPosition).id());
+                }
+            });
         }
     }
 }

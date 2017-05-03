@@ -31,7 +31,7 @@ public abstract class Salary {
         return new AutoValue_Salary.Builder();
     }
 
-
+    abstract public Builder toBuilder();
 
     @AutoValue.Builder public abstract static class Builder {
         public abstract Builder id(int id);

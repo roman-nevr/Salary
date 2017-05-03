@@ -39,7 +39,7 @@ public abstract class Employee {
         return new AutoValue_Employee.Builder();
     }
 
-
+    public abstract Builder toBuilder();
 
 
     @AutoValue.Builder public abstract static class Builder {

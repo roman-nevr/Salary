@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 import ru.rubicon.salary.data.entity.Employee;
 import ru.rubicon.salary.data.entity.Salary;
-import ru.rubicon.salary.utils.utils;
+import ru.rubicon.salary.utils.Utils;
 
 /**
  * Created by roma on 03.06.2016.
@@ -94,7 +94,7 @@ public class DatabaseHelper extends SQLiteOpenHelper implements BaseColumns{
 
             for(Employee employee:employees){
                 values = new ContentValues();
-                values.put(BaseColumns._ID, employee.getId());
+//                values.put(BaseColumns._ID, employee.getId());
                 values.put(EMPLOYEE_NAME, employee.getName());
                 values.put(EMPLOYEE_COEF, employee.getCoefficient());
                 values.put(EMPLOYEE_ACTIVITY, true);
@@ -102,7 +102,7 @@ public class DatabaseHelper extends SQLiteOpenHelper implements BaseColumns{
             }
         }
         else {
-            utils.log("database is null");
+            Utils.log("database is null");
         }
     }
 

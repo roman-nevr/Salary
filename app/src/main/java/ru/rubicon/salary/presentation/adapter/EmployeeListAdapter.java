@@ -12,6 +12,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ru.rubicon.salary.R;
 import ru.rubicon.salary.domain.entity.Employee;
+import ru.rubicon.salary.presentation.OnItemClickListener;
 
 /**
  * Created by roma on 16.06.2016.
@@ -19,9 +20,11 @@ import ru.rubicon.salary.domain.entity.Employee;
 public class EmployeeListAdapter extends RecyclerView.Adapter<EmployeeListAdapter.EmployeeViewHolder> {
 
     private List<Employee> employees;
+    private OnItemClickListener listener;
 
-    public EmployeeListAdapter(List<Employee> employees) {
+    public EmployeeListAdapter(List<Employee> employees, OnItemClickListener listener) {
         this.employees = employees;
+        this.listener = listener;
         hasStableIds();
     }
 
@@ -43,7 +46,7 @@ public class EmployeeListAdapter extends RecyclerView.Adapter<EmployeeListAdapte
         return employees.size();
     }
 
-    public static class EmployeeViewHolder extends RecyclerView.ViewHolder{
+    class EmployeeViewHolder extends RecyclerView.ViewHolder{
 
         @BindView(R.id.employee_name) TextView employeeName;
         @BindView(R.id.employee_coef) TextView employeeCoef;
@@ -51,6 +54,12 @@ public class EmployeeListAdapter extends RecyclerView.Adapter<EmployeeListAdapte
         public EmployeeViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(v -> {
+                int adapterPosition = getAdapterPosition();
+                if(adapterPosition != RecyclerView.NO_POSITION){
+                    listener.onItemClick(employees.get(adapterPosition).id());
+                }
+            });
         }
     }
 }

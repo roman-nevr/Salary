@@ -6,13 +6,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.rubicon.salary.data.deserealizer.MyAdapterFactory;
 import ru.rubicon.salary.domain.entity.Employee;
 import ru.rubicon.salary.domain.entity.Salary;
 import ru.rubicon.salary.domain.entity.SalaryTableRecord;
@@ -22,22 +18,28 @@ import ru.rubicon.salary.domain.entity.SalaryTableRecord;
  */
 public class DatabaseHelper extends SQLiteOpenHelper implements BaseColumns {
 
-    public static final int DATABASE_VERSION = 2;
-    public static final String DATABASE_NAME = "salary.db";
+    private static final int DATABASE_VERSION = 2;
+    private static final String DATABASE_NAME = "salary.db";
 
-    public static final String EMPLOYEES_TABLE = "employees";
-    public static final String EMPLOYEE_NAME = "name";
-    public static final String EMPLOYEE_COEF = "coef";
-    public static final String EMPLOYEE_IS_ACTIVE = "is_active";
-    public static final String EMPLOYEE_HAS_FIXED_SALARY = "has_fixed";
-    public static final String EMPLOYEE_FIXED_SALARY = "fixed_salary";
-    public static final String EMPLOYEE_COMMENT = "comment";
+    static final String EMPLOYEES_TABLE = "employees";
+    static final String EMPLOYEE_NAME = "name";
+    static final String EMPLOYEE_COEF = "coef";
+    static final String EMPLOYEE_IS_ACTIVE = "is_active";
+    static final String EMPLOYEE_HAS_FIXED_SALARY = "has_fixed";
+    static final String EMPLOYEE_FIXED_SALARY = "fixed_salary";
+    static final String EMPLOYEE_COMMENT = "comment";
 
-    public static final String SALARIES_TABLE = "salaries";
-    public static final String CASH_DATE = "date";
-    public static final String CASH_TOTAL = "total";
-    public static final String CASH_TABLE_RECORDS = "records";
-    public static final String CASH_COMMENT = "comment";
+    static final String SALARIES_TABLE = "salaries";
+    static final String CASH_DATE = "date";
+    static final String CASH_TOTAL = "total";
+    static final String CASH_COMMENT = "comment";
+
+    static final String RECORDS_TABLE = "records_table";
+    static final String RECORDS_SALARY_ID = "salary_id";
+    static final String RECORDS_EMPLOYEE = "employee_name";
+    static final String RECORDS_COEF = "employee_coef";
+    static final String RECORDS_DAYS = "days";
+    static final String RECORDS_SALARY = "salary_sum";
 
 
     public DatabaseHelper(Context context) {
@@ -58,17 +60,27 @@ public class DatabaseHelper extends SQLiteOpenHelper implements BaseColumns {
                 BaseColumns._ID + " integer primary key autoincrement, " +
                 CASH_DATE + " integer not null, " +
                 CASH_TOTAL + " integer not null, " +
-                CASH_TABLE_RECORDS + " text not null, " +
                 CASH_COMMENT + " text);";
+        String script_records = "create table " + RECORDS_TABLE + " (" +
+                BaseColumns._ID + " integer primary key autoincrement, " +
+                RECORDS_SALARY_ID + " integer not null, " +
+                RECORDS_EMPLOYEE + " text not null, " +
+                RECORDS_COEF + " real not null, " +
+                RECORDS_DAYS + " real not null, " +
+                RECORDS_SALARY + " integer not null);";
         db.execSQL(script_employee);
         fillEmployeeDataBase(db);
         db.execSQL(script_salaries);
         fillSalaryDatabase(db);
+        db.execSQL(script_records);
+        fillRecordsDataBase(db);
     }
+
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + EMPLOYEES_TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + SALARIES_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + RECORDS_TABLE);
         onCreate(db);
     }
 
@@ -76,103 +88,103 @@ public class DatabaseHelper extends SQLiteOpenHelper implements BaseColumns {
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + EMPLOYEES_TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + SALARIES_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + RECORDS_TABLE);
         onCreate(db);
     }
 
     public void fillEmployeeDataBase(SQLiteDatabase db) {
-        //ToDO
-//        ContentValues values = new ContentValues();
-//        values.put(BaseColumns._ID, 0);
-//        values.put(EMPLOYEE_NAME, "Roman");
-//        values.put(EMPLOYEE_COEF, 1f);
-//        values.put(EMPLOYEE_IS_ACTIVE, true);
-//        values.put(EMPLOYEE_HAS_FIXED_SALARY, false);
-//        values.put(EMPLOYEE_FIXED_SALARY, 0);
-//        values.put(EMPLOYEE_COMMENT, "");
-//
-//        db.insert(EMPLOYEES_TABLE, null, values);
-//
-//        values.put(BaseColumns._ID, 1);
-//        values.put(EMPLOYEE_NAME, "Viktor");
-//        values.put(EMPLOYEE_COEF, 1f);
-//        values.put(EMPLOYEE_IS_ACTIVE, true);
-//        values.put(EMPLOYEE_HAS_FIXED_SALARY, false);
-//        values.put(EMPLOYEE_FIXED_SALARY, 0);
-//        values.put(EMPLOYEE_COMMENT, "");
-//
-//        db.insert(EMPLOYEES_TABLE, null, values);
         Filler.fillEmployeeDataBase(db);
     }
 
     public void fillSalaryDatabase(SQLiteDatabase db) {
-        //ToDO
-//        Employee employee = Employee.create(1, "I", 1f, true, false, 0, "");
-//        SalaryTableRecord record = SalaryTableRecord.create(0, employee, 100, 10);
-//        List<SalaryTableRecord> records = new ArrayList<>();
-//        records.add(record);
-//
-//        Gson gson = new GsonBuilder()
-//                .registerTypeAdapterFactory(MyAdapterFactory.create())
-//                .create();
-//
-//        ContentValues values = new ContentValues();
-//        values.put(_ID, 0);
-//        values.put(CASH_DATE, System.currentTimeMillis());
-//        values.put(CASH_TOTAL, 100000);
-//        values.put(CASH_TABLE_RECORDS, gson.toJson(records));
-//        values.put(CASH_COMMENT, "");
-//        db.insert(SALARIES_TABLE, null, values);
         Filler.fillSalaryDatabase(db);
+    }
+
+    private void fillRecordsDataBase(SQLiteDatabase db) {
+        Filler.fillRecordsDatabse(db);
     }
 
     private static class Filler{
 
         private static List<Employee> employees;
+        private static Salary salary;
 
         private static void createEmployeeList(){
             employees = new ArrayList<>();
             employees.add(createEmployee(0, "Viktor", 2.5f));
             employees.add(createEmployee(1, "Leha", 1.5f));
             employees.add(createEmployee(2, "Shurik", 2.5f));
+            employees.add(createEmployee(3, "Ivan", 2.5f));
+            employees.add(createEmployee(4, "Roman", 2.5f));
+            employees.add(createEmployee(5, "Evgenia", 2.5f));
+            employees.add(createEmployee(6, "Shurik", 2.5f));
+            employees.add(createEmployee(7, "Shurik", 2.5f));
         }
 
         public static void fillEmployeeDataBase(SQLiteDatabase db) {
             createEmployeeList();
             ContentValues values = new ContentValues();
             for (Employee employee : employees) {
-                values.clear();
-
-                values.put(BaseColumns._ID, employee.id());
-                values.put(EMPLOYEE_NAME, employee.name());
-                values.put(EMPLOYEE_COEF, employee.coefficient());
-                values.put(EMPLOYEE_IS_ACTIVE, employee.isActive());
-                values.put(EMPLOYEE_HAS_FIXED_SALARY, employee.hasFixedSalary());
-                values.put(EMPLOYEE_FIXED_SALARY, employee.dailySalary());
-                values.put(EMPLOYEE_COMMENT, employee.comment());
-
-                db.insert(EMPLOYEES_TABLE, null, values);
+                save(employee, db);
             }
+        }
+
+        private static void save(Employee employee, SQLiteDatabase db) {
+            ContentValues values = new ContentValues();
+
+//                values.put(BaseColumns._ID, employee.id());
+            values.put(EMPLOYEE_NAME, employee.name());
+            values.put(EMPLOYEE_COEF, employee.coefficient());
+            values.put(EMPLOYEE_IS_ACTIVE, employee.isActive());
+            values.put(EMPLOYEE_HAS_FIXED_SALARY, employee.hasFixedSalary());
+            values.put(EMPLOYEE_FIXED_SALARY, employee.dailySalary());
+            values.put(EMPLOYEE_COMMENT, employee.comment());
+
+            db.insert(EMPLOYEES_TABLE, null, values);
         }
 
         public static void fillSalaryDatabase(SQLiteDatabase db) {
             if(employees == null){
                 createEmployeeList();
             }
-            ContentValues values = new ContentValues();
             Salary salary = createSalary();
 
-            Gson gson = new GsonBuilder()
-                    .registerTypeAdapterFactory(MyAdapterFactory.create())
-                    .create();
+            save(salary, db);
 
+        }
+
+        private static void save(Salary salary, SQLiteDatabase db) {
+            ContentValues values = new ContentValues();
             values.clear();
             values.put(_ID, salary.id());
             values.put(CASH_DATE, salary.date());
             values.put(CASH_TOTAL, salary.total());
-            values.put(CASH_TABLE_RECORDS, gson.toJson(createTableRecords()));
             values.put(CASH_COMMENT, "");
             db.insert(SALARIES_TABLE, null, values);
+        }
 
+        public static void fillRecordsDatabse(SQLiteDatabase db) {
+            if(salary == null){
+                salary = createSalary();
+            }
+            ContentValues values = new ContentValues();
+            List<SalaryTableRecord> records = salary.salaryTableRecords();
+            for (SalaryTableRecord record : records) {
+                save(record, db);
+            }
+        }
+
+        private static void save(SalaryTableRecord record, SQLiteDatabase db) {
+            ContentValues values = new ContentValues();
+            values.clear();
+                values.put(_ID, record.id());
+            values.put(RECORDS_SALARY_ID, record.salaryId());
+            values.put(RECORDS_EMPLOYEE, record.employee());
+            values.put(RECORDS_COEF, record.coefficient());
+            values.put(RECORDS_DAYS, record.amountsOfDays());
+            values.put(RECORDS_SALARY, record.salary());
+
+            db.insert(RECORDS_TABLE, null, values);
         }
 
         private static Employee createEmployee(int id, String name, float coef){
@@ -180,14 +192,20 @@ public class DatabaseHelper extends SQLiteOpenHelper implements BaseColumns {
         }
 
         private static Salary createSalary(){
-            List<SalaryTableRecord> records = createTableRecords();
-            return Salary.create(0, System.currentTimeMillis(), 100000, records, "");
+            int total = 100000;
+            int salaryId = 0;
+            List<SalaryTableRecord> records = createTableRecords(salaryId, total);
+            return Salary.create(salaryId, System.currentTimeMillis(), total, records, "");
         }
 
-        private static List<SalaryTableRecord> createTableRecords() {
+        private static List<SalaryTableRecord> createTableRecords(int salaryId, int total) {
+            if(employees == null){
+                createEmployeeList();
+            }
             List<SalaryTableRecord> records = new ArrayList<>();
+            int id = 0;
             for (Employee employee : employees) {
-                records.add(SalaryTableRecord.create(0, employee, 10000, 20));
+                records.add(SalaryTableRecord.create(id++, salaryId, employee.name(), employee.coefficient(), 20, 10000));
             }
             return records;
         }

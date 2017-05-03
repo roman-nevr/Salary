@@ -1,6 +1,6 @@
 package ru.rubicon.salary.presentation;
 
-public interface Router {
+public interface NavigationRouter {
     void addSalary();
 
     void addEmployee();

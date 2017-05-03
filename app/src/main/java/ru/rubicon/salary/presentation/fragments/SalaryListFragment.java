@@ -10,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 
 import java.util.List;
 
@@ -21,8 +20,8 @@ import butterknife.ButterKnife;
 import ru.rubicon.salary.R;
 import ru.rubicon.salary.domain.entity.Salary;
 import ru.rubicon.salary.presentation.App;
-import ru.rubicon.salary.presentation.Router;
-import ru.rubicon.salary.presentation.adapter.SalariesAdapter;
+import ru.rubicon.salary.presentation.NavigationRouter;
+import ru.rubicon.salary.presentation.adapter.SalaryListAdapter;
 import ru.rubicon.salary.presentation.presenter.SalaryListPresenter;
 
 public class SalaryListFragment extends Fragment {
@@ -40,14 +39,20 @@ public class SalaryListFragment extends Fragment {
         View view = inflater.inflate(R.layout.salary_list, container, false);
         ButterKnife.bind(this, view);
 
+        initUi();
+
+        initDi();
+        return view;
+    }
+
+    private void initUi() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
                 layoutManager.getOrientation());
         recyclerView.addItemDecoration(dividerItemDecoration);
         recyclerView.setLayoutManager(layoutManager);
 
-        initDi();
-        return view;
+        floatingActionButton.setOnClickListener(v -> presenter.onFabClick());
     }
 
     @Override public void onStart() {
@@ -58,11 +63,11 @@ public class SalaryListFragment extends Fragment {
     private void initDi() {
         App.getInstance().getMainComponent().plusSalaryComponent().inject(this);
         presenter.setView(this);
-        presenter.setRouter((Router)getActivity());
+        presenter.setRouter((NavigationRouter)getActivity());
     }
 
     public void showSalaries(List<Salary> salaries){
-        adapter = new SalariesAdapter(salaries);
+        adapter = new SalaryListAdapter(salaries, presenter);
         recyclerView.setAdapter(adapter);
     }
 }

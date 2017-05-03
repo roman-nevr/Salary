@@ -61,8 +61,8 @@ public class MainModule {
 
     @Singleton
     @Provides
-    public SalaryDataRepository provideSalaryDataRepository(DatabaseHelper databaseHelper, Gson gson){
-        return new SalaryDataRepositoryImpl(databaseHelper, gson);
+    public SalaryDataRepository provideSalaryDataRepository(DatabaseHelper databaseHelper){
+        return new SalaryDataRepositoryImpl(databaseHelper);
     }
 
     @Singleton

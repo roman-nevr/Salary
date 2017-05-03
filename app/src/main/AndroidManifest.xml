@@ -11,7 +11,7 @@
         android:name=".presentation.App"
         >
         <activity
-            android:name=".presentation.activity.DetailsActivity"
+            android:name=".presentation.activity.NavigationScreen"
             android:windowSoftInputMode="adjustPan"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
@@ -21,7 +21,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".presentation.activity.NavigationScreen"
+            android:name=".presentation.activity.DetailsActivity"
             android:windowSoftInputMode="adjustPan"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">

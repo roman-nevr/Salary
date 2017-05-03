@@ -116,7 +116,7 @@ public class EmployeeCalcDialogFragment extends DialogFragment {
         editText.requestFocus();
         editText.setSelection(editText.length());
         editText.setError(getResources().getText(R.string.error_message));
-        throw new RuntimeException();
+//        throw new RuntimeException();
     }
 
     private void hideKeyboard() {

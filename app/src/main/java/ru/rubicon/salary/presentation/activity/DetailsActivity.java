@@ -13,14 +13,17 @@ import android.support.v7.widget.Toolbar;
 
 import butterknife.BindView;
 import ru.rubicon.salary.R;
+import ru.rubicon.salary.presentation.DetailsRouter;
 import ru.rubicon.salary.presentation.fragments.EmployeeDetailsFragment;
+import ru.rubicon.salary.presentation.fragments.SalaryDetailsFragment;
 
-public class DetailsActivity extends AppCompatActivity {
+public class DetailsActivity extends AppCompatActivity implements DetailsRouter{
 
     public static final String TYPE = "type";
     public static final String ID = "id";
 
     private int type;
+    private int id;
 
     public static final String TAG = "tag";
 
@@ -33,6 +36,7 @@ public class DetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         initUi();
         readType();
+        readId();
         fragmentManager = getSupportFragmentManager();
     }
 
@@ -68,11 +72,11 @@ public class DetailsActivity extends AppCompatActivity {
             case R.id.add_employee:
                 return EmployeeDetailsFragment.getInstance();
             case R.id.add_salary:
-                return HistoryFragment.getHistoryFragment();
+                return SalaryDetailsFragment.getInstance();
             case R.id.edit_employee:
-                return EmployeeDetailsFragment.getInstance();
+                return EmployeeDetailsFragment.getInstance(id);
             case R.id.edit_salary:
-                return HistoryFragment.getFavouriteFragment();
+                return SalaryDetailsFragment.getInstance(id);
             default:
                 throw new IllegalArgumentException();
         }
@@ -91,8 +95,13 @@ public class DetailsActivity extends AppCompatActivity {
 
     private void readType(){
         type = getIntent().getIntExtra(TYPE, -1);
-        if (type == -1){
-            throw new IllegalArgumentException("type must be sent");
-        }
+    }
+
+    private void readId(){
+        id = getIntent().getIntExtra(ID, -1);
+    }
+
+    @Override public void close() {
+        finish();
     }
 }
